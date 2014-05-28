@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('qtoolApp', [])
+var qtoolControllers = angular.module('qtoolControllers', []);
 
-	.controller('MainCtrl', function () {
-	
+qtoolControllers.controller('MainCtrl', function ($scope, Poller) {
+		$scope.data = Poller.data;
 });

@@ -1,12 +1,15 @@
 'use strict';
 
-angular.module('qtoolApp', [
+var qtoolApp = angular.module('qtoolApp', [
     'ngCookies',
     'ngResource',
     'ngSanitize',
-    'ngRoute'
-  ])
-  .config(function ($routeProvider) {
+    'ngRoute',
+    'qtoolControllers',
+    'qtoolServices'
+  ]);
+  
+qtoolApp.config(function ($routeProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'views/main.html',
@@ -15,4 +18,4 @@ angular.module('qtoolApp', [
       .otherwise({
         redirectTo: '/'
       });
-  });
+}).run(function(Poller) {});
