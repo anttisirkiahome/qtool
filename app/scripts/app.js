@@ -1,7 +1,6 @@
 'use strict';
 
-angular
-  .module('qtoolApp', [
+angular.module('qtoolApp', [
     'ngCookies',
     'ngResource',
     'ngSanitize',
