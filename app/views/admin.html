@@ -1,8 +1,19 @@
 <div class="navigation-editor-container">
 	<div class="row">
 		<div class="col-md-12 white rounded10 help">
-			<a ng-click="switchTemplate('defaultTemplate')"><i class="fa fa-question-circle fa-4x" title="Help"></i></a>
-			<a ng-click="logout" class="right"><i class="fa fa-reply fa-4x" title="Logout"></i></a>
+			<div class="row">
+				<div class="col-md-4">
+					<a ng-click="switchTemplate('defaultTemplate')"><i class="fa fa-question-circle fa-4x" title="Help"></i></a>
+				</div>
+				<div class="col-md-6">
+						<h1 class="title">qTool<sup>2</sup></h1>
+				</div>
+				<div class="col-md-2">
+					<a ng-click="logout" class="right"><i class="fa fa-reply fa-4x" title="Logout"></i></a>
+				</div>
+			</div>
+		
+			
 		</div>
 	</div>
 	<div class="row">
@@ -16,16 +27,28 @@
 		</div>
 		<div class="col-md-1"></div>
 		<!-- include the template requested -->
-		<div class="col-md-8 white rounded10" ng-include="currentTemplate"></div>
+		<div class="col-md-8 white rounded10 adminContent" ng-include="currentTemplate"></div>
 
 		<!-- templates for admin view -->
 		<script type="text/ng-template" id="newPoll">
 			<h2>New Poll</h2>
 			<hr />
 			<form class="question">
-			<label>Question <input type="text" name="newQuestion" class="form-control"/></label>
+				<input type="text" name="newQuestion" class="form-control" placeholder="Question"/>
+				<hr />
+				<ul>
+					<li ng-repeat="answer in answers track by $index">
+						<input type="text" ng-model="answers[$index]" class="answer form-control left" placeholder="Answer {{$index + 1}}" tabindex="{{$index}}" />
+						<button ng-click="moveAnswerUp($index)" class="answerUp left" ng-class="{visibilityNone: $index == 0}"><i class="fa fa-arrow-up fa-2x"></i></button>
+						<button ng-click="moveAnswerDown($index)" class="answerDown left" ng-class="{visibilityNone: $index == (answers.length - 1) || answers.length == 1}"><i class="fa fa-arrow-down fa-2x"></i></button>
+						<button class="right" ng-click="removeAnswer($index)"><i class="fa fa-times fa-2x"></i></button>
+					</li>
+				</ul>
+				<div class="controls">
+					<button class="btn button left btn-info" ng-click="addAnswer()" ng-hide="answers.length > 5"><i class="fa fa-plus fa-2x"></i> <span class="alignMiddle">Add answer</span></button>
+					<button class="btn button right btn-success"><i class="fa fa-2x fa-check"></i> Create Poll!</button>
+				</div>
 			</form>
-
 		</script>
 		<script type="text/ng-template" id="editUsers">
 			<h2>Edit users</h2>

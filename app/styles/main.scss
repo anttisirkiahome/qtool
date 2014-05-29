@@ -152,6 +152,9 @@ body {
 
     .fa-reply {
         color: #e80d0d;
+        &:hover {
+            color: #840000;
+        }
     }
 }
 
@@ -163,4 +166,50 @@ body {
 }
 .right {
     float: right;
+}
+.left {
+    float: left;
+}
+
+.title {
+    margin: 6px 0;
+    padding: 0;
+}
+
+.question {
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        min-height: 46px;
+        overflow: auto;
+
+        li {
+            margin-bottom: 18px;
+            min-height: 36px;
+
+            input {
+                width: 60%;
+            }
+        }
+    }
+}
+
+.controls {
+    margin-top: 16px;
+
+    .alignMiddle {
+        line-height: 2em;
+    }
+    i {
+        vertical-align: middle;
+    }
+}
+
+.adminContent {
+    padding: 0 12px 18px 12px;
+}
+
+.visibilityNone {
+    visibility: hidden;
 }
