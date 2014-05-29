@@ -1,0 +1,41 @@
+<div class="navigation-editor-container">
+	<div class="row">
+		<div class="col-md-12 white rounded10 help">
+			<a ng-click="switchTemplate('defaultTemplate')"><i class="fa fa-question-circle fa-4x" title="Help"></i></a>
+			<a ng-click="logout" class="right"><i class="fa fa-reply fa-4x" title="Logout"></i></a>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-3 white rounded10 menu">
+			<h2>Menu</h2>
+			<hr />
+				<ul>
+					<li><a ng-click="switchTemplate('newPoll')"><i class="fa fa-plus"></i> New poll</a></li>
+					<li><a ng-click="switchTemplate('editUsers')"><i class="fa fa-plus"></i> Users</a></li>
+				</ul>
+		</div>
+		<div class="col-md-1"></div>
+		<!-- include the template requested -->
+		<div class="col-md-8 white rounded10" ng-include="currentTemplate"></div>
+
+		<!-- templates for admin view -->
+		<script type="text/ng-template" id="newPoll">
+			<h2>New Poll</h2>
+			<hr />
+			<form class="question">
+			<label>Question <input type="text" name="newQuestion" class="form-control"/></label>
+			</form>
+
+		</script>
+		<script type="text/ng-template" id="editUsers">
+			<h2>Edit users</h2>
+			<hr />
+		</script>
+		<script type="text/ng-template" id="defaultTemplate">
+			<h2> How to use</h2>
+			<hr />
+			<p>
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse eleifend est at dolor accumsan, a egestas erat condimentum. Cras ut tincidunt orci. Integer dui magna, lobortis eget urna in, rutrum rutrum est. Sed non volutpat odio. Integer massa lectus, ultricies sit amet egestas quis, suscipit sed libero. <br /> <br /> Phasellus quis diam et lacus vestibulum congue. Morbi molestie metus quis felis molestie fringilla. Aenean eget velit dapibus, mattis sapien sed, volutpat tortor. Nullam massa purus, feugiat nec massa et, consequat lobortis mauris. <br /> <br /> Sed blandit augue nec posuere tincidunt. Donec eget nisi auctor metus congue adipiscing. Donec consequat est metus, at sodales turpis bibendum nec. Quisque suscipit varius posuere. Curabitur venenatis, lacus sit amet ullamcorper hendrerit, nulla arcu tempus tortor, sed accumsan dui nisl ut lectus. Donec placerat leo sit amet ipsum fringilla, ut gravida lectus rhoncus. </p>
+		</script>
+		
+</div>
