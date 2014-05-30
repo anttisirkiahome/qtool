@@ -75,12 +75,14 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window) {
 			diff = diff - delta;
 		}
 		var timeInSeconds = parseInt($scope.duration.split(':')[1]) + parseInt($scope.duration.split(':')[0]) * 60 + diff;
+		
+		var tempMinutes = parseInt(timeInSeconds / 60);
 		var tempSeconds = timeInSeconds % 60;
+
 		if(tempSeconds <= 0) {
 			tempSeconds = 0;
 		}
-		var tempMinutes = parseInt(timeInSeconds / 60);
-
+		
 		if(tempMinutes < 10) {
 			tempMinutes = '0' + tempMinutes;
 		}
