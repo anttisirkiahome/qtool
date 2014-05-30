@@ -12,8 +12,6 @@
 					<a ng-click="logout" class="right"><i class="fa fa-reply fa-4x" title="Logout"></i></a>
 				</div>
 			</div>
-		
-			
 		</div>
 	</div>
 	<div class="row">
@@ -38,14 +36,39 @@
 				<hr />
 				<ul>
 					<li ng-repeat="answer in answers track by $index">
-						<input type="text" ng-model="answers[$index]" class="answer form-control left" placeholder="Answer {{$index + 1}}" tabindex="{{$index}}" />
-						<button ng-click="moveAnswerUp($index)" class="answerUp left btn btn-default" ng-class="{visibilityNone: $index == 0}"><i class="fa fa-arrow-up fa-2x"></i></button>
-						<button ng-click="moveAnswerDown($index)" class="btn buttonanswerDown left btn-default button" ng-class="{visibilityNone: $index == (answers.length - 1) || answers.length == 1}"><i class="fa fa-arrow-down fa-2x"></i></button>
-						<button class="btn right button btn-danger" ng-click="removeAnswer($index)"><i class="fa fa-times fa-2x"></i></button>
+						<input 	type="text" 
+								ng-model="answers[$index]" 
+								class="answer form-control left" 
+								placeholder="Answer {{$index + 1}}" 
+								tabindex="{{$index}}" />
+						<button 
+								ng-click="moveAnswerUp($index)" 
+								class="answerUp left btn btn-default" 
+								ng-class="{visibilityNone: $index == 0}">
+									<i class="fa fa-arrow-up fa-2x"></i>
+						</button>
+						<button 
+								ng-click="moveAnswerDown($index)" 
+								class="btn buttonanswerDown left btn-default button" 
+								ng-class="{visibilityNone: $index == (answers.length - 1) || answers.length == 1}">
+									<i class="fa fa-arrow-down fa-2x"></i>
+						</button>
+						<button 
+								class="btn right button btn-danger" 
+								ng-click="removeAnswer($index)" 
+								ng-hide="answers.length === 1">
+									<i class="fa fa-times fa-2x"></i>
+						</button>
 					</li>
 				</ul>
 				<div class="controls">
-					<button class="btn button left btn-info" ng-click="addAnswer()" ng-hide="answers.length > 5"><i class="fa fa-plus fa-2x"></i> <span class="alignMiddle">Add answer</span></button>
+					<button 
+							class="btn button left btn-info" 
+							ng-click="addAnswer()" 
+							ng-hide="answers.length > 5">
+								<i class="fa fa-plus fa-2x"></i> 
+								<span class="alignMiddle">Add answer</span>
+					</button>
 					<button class="btn button right btn-success"><i class="fa fa-2x fa-check"></i> Create Poll!</button>
 				</div>
 			</form>

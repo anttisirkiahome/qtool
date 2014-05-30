@@ -36,22 +36,26 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window) {
 	}
 
 	$scope.moveAnswerUp = function(index) {
-		var oldValue = $scope.answers[index];
-		var newValue = $scope.answers[(index -1)];
-
-		$scope.answers[index] = newValue;
-		$scope.answers[(index -1)] = oldValue;
+		togglePosition(index, 'down');
 	}
 
 	$scope.moveAnswerDown = function(index) {
-		var oldValue = $scope.answers[index];
-		var newValue = $scope.answers[(index + 1)];
-
-		$scope.answers[index] = newValue;
-		$scope.answers[(index + 1)] = oldValue;
+		togglePosition(index, 'up');
 	}
 
-	var togglePosition = function(a, b, c) {
+	var togglePosition = function(index, direction) {
+		var newIndex = 0;
+		if(direction === 'up') {
+			newIndex = index + 1;
+		} else {
+			newIndex = index - 1;
+		}
+		var oldValue = $scope.answers[index];
+		var newValue = $scope.answers[newIndex];
+
+		$scope.answers[index] = newValue;
+		$scope.answers[newIndex] = oldValue;
+
 		
 	}
 
