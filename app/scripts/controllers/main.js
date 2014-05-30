@@ -82,21 +82,23 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window) {
 		if(tempSeconds <= 0) {
 			tempSeconds = 0;
 		}
+
+		$scope.poll.duration = tempMinutes * 60 + tempSeconds;
 		
+		// you could stringify the rest, but let's gake an easy route.. 
 		if(tempMinutes < 10) {
 			tempMinutes = '0' + tempMinutes;
 		}
 		if(tempSeconds == 0) {
 			tempSeconds = '0' + tempSeconds;
 		}
+		if(tempMinutes == 0 && tempSeconds == 0) {
+			tempSeconds = delta;
+		}
 		
 		$scope.duration = tempMinutes + ':' + tempSeconds;
-		
-		
-		
-
-
 	}
+
 
 
 });
