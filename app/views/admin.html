@@ -44,20 +44,20 @@
 								pattern=".{2,}" title="Vastauksen tulee olla vähintään 2 merkkiä pitkä."/>
 								
 						<button 
-								ng-click="moveAnswerUp($index)" 
+								ng-click="togglePosition('up', $index, $event)" 
 								class="answerUp left btn btn-default" 
 								ng-class="{visibilityNone: $index == 0}">
 									<i class="fa fa-arrow-up fa-2x"></i>
 						</button>
 						<button 
-								ng-click="moveAnswerDown($index)" 
+								ng-click="togglePosition('down', $index, $event)" 
 								class="btn buttonanswerDown left btn-default button" 
 								ng-class="{visibilityNone: $index == (poll.answers.length - 1) || poll.answers.length == 1}">
 									<i class="fa fa-arrow-down fa-2x"></i>
 						</button>
 						<button 
 								class="btn right button btn-danger" 
-								ng-click="removeAnswer($index)" 
+								ng-click="removeAnswer($index, $event)" 
 								ng-hide="poll.answers.length <= 2">
 									<i class="fa fa-times fa-2x"></i>
 						</button>
@@ -68,7 +68,7 @@
 
 					<button 
 							class="btn button left btn-info" 
-							ng-click="addAnswer()" 
+							ng-click="addAnswer($event)" 
 							ng-hide="poll.answers.length > 5">
 								<i class="fa fa-plus fa-2x"></i> 
 								<span class="alignMiddle">Add answer</span>

@@ -22,29 +22,24 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window) {
 		$scope.currentTemplate = template;
 	}
 
-	$scope.addAnswer = function() {
+	$scope.addAnswer = function(event) {
+		event.preventDefault();
 		if($scope.poll.answers.length < 6) {
 			$scope.poll.answers.push('');	
 		}
 	}
 
-	$scope.removeAnswer = function(index) {
+	$scope.removeAnswer = function(index, event) {
+		event.preventDefault();
 		if($scope.poll.answers.length > 1) {
 			$scope.poll.answers.splice($scope.poll.answers.indexOf($scope.poll.answers[index]), 1);
 		}
 	}
 
-	$scope.moveAnswerUp = function(index) {
-		togglePosition(index, 'down');
-	}
-
-	$scope.moveAnswerDown = function(index) {
-		togglePosition(index, 'up');
-	}
-
-	var togglePosition = function(index, direction) {
+	$scope.togglePosition = function(direction, index, event) {
+		event.preventDefault();
 		var newIndex = 0;
-		if(direction === 'up') {
+		if(direction === 'down') {
 			newIndex = index + 1;
 		} else {
 			newIndex = index - 1;
