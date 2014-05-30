@@ -39,9 +39,9 @@
 				<ul>
 					<li ng-repeat="answer in answers track by $index">
 						<input type="text" ng-model="answers[$index]" class="answer form-control left" placeholder="Answer {{$index + 1}}" tabindex="{{$index}}" />
-						<button ng-click="moveAnswerUp($index)" class="answerUp left" ng-class="{visibilityNone: $index == 0}"><i class="fa fa-arrow-up fa-2x"></i></button>
-						<button ng-click="moveAnswerDown($index)" class="answerDown left" ng-class="{visibilityNone: $index == (answers.length - 1) || answers.length == 1}"><i class="fa fa-arrow-down fa-2x"></i></button>
-						<button class="right" ng-click="removeAnswer($index)"><i class="fa fa-times fa-2x"></i></button>
+						<button ng-click="moveAnswerUp($index)" class="answerUp left btn btn-default" ng-class="{visibilityNone: $index == 0}"><i class="fa fa-arrow-up fa-2x"></i></button>
+						<button ng-click="moveAnswerDown($index)" class="btn buttonanswerDown left btn-default button" ng-class="{visibilityNone: $index == (answers.length - 1) || answers.length == 1}"><i class="fa fa-arrow-down fa-2x"></i></button>
+						<button class="btn right button btn-danger" ng-click="removeAnswer($index)"><i class="fa fa-times fa-2x"></i></button>
 					</li>
 				</ul>
 				<div class="controls">

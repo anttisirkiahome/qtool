@@ -177,6 +177,12 @@ body {
 }
 
 .question {
+    button {
+        margin: 0 4px;
+    }
+    input {
+        height: 3em;
+    }
     ul {
         list-style: none;
         padding: 0;
@@ -190,6 +196,7 @@ body {
 
             input {
                 width: 60%;
+                margin-right: 6px;
             }
         }
     }

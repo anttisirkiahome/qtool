@@ -51,5 +51,9 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window) {
 		$scope.answers[(index + 1)] = oldValue;
 	}
 
+	var togglePosition = function(a, b, c) {
+		
+	}
+
 
 });
