@@ -10,8 +10,8 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window) {
 	//init app status
 	$scope.creatingNewPoll = false;
 	$scope.currentTemplate = 'defaultTemplate';
-	$scope.question = '';
-	$scope.answers = [''];
+	$scope.poll = {'question': '', 'answers': ['', '']};
+	$scope.errorMessages = [];
 
 	$scope.loginSubmit = function() {
 		//FIXME temp solution
@@ -24,14 +24,14 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window) {
 	}
 
 	$scope.addAnswer = function() {
-		if($scope.answers.length < 6) {
-			$scope.answers.push('');	
+		if($scope.poll.answers.length < 6) {
+			$scope.poll.answers.push('');	
 		}
 	}
 
 	$scope.removeAnswer = function(index) {
-		if($scope.answers.length > 1) {
-			$scope.answers.splice($scope.answers.indexOf($scope.answers[index]), 1);
+		if($scope.poll.answers.length > 1) {
+			$scope.poll.answers.splice($scope.poll.answers.indexOf($scope.poll.answers[index]), 1);
 		}
 	}
 
@@ -50,13 +50,24 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window) {
 		} else {
 			newIndex = index - 1;
 		}
-		var oldValue = $scope.answers[index];
-		var newValue = $scope.answers[newIndex];
+		var oldValue = $scope.poll.answers[index];
+		var newValue = $scope.poll.answers[newIndex];
 
-		$scope.answers[index] = newValue;
-		$scope.answers[newIndex] = oldValue;
+		$scope.poll.answers[index] = newValue;
+		$scope.poll.answers[newIndex] = oldValue;
+	}
 
-		
+	$scope.createPoll = function() {
+		console.log('clicked createPoll button')
+		console.log('question: ' , $scope.poll.question);
+		//reset error messages after each submit
+		//we could use form validation on the template side, but this is faster to develop :)
+		$scope.errorMessages = [];
+		if($scope.poll.question.length > 5) { // 5 is probably too short, so... FIXME
+			console.log('poll : ' , $scope.poll)
+		} else {
+			$scope.errorMessages.push('Kysymys on liian lyhyt.');
+		}
 	}
 
 

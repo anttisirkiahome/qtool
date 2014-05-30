@@ -32,15 +32,16 @@
 			<h2>New Poll</h2>
 			<hr />
 			<form class="question">
-				<input type="text" name="newQuestion" class="form-control" placeholder="Question"/>
+				<input type="text" name="newQuestion" class="form-control" placeholder="Question" ng-model="poll.question" />
 				<hr />
 				<ul>
-					<li ng-repeat="answer in answers track by $index">
+					<li ng-repeat="answer in poll.answers track by $index">
 						<input 	type="text" 
-								ng-model="answers[$index]" 
+								ng-model="poll.answers[$index]" 
 								class="answer form-control left" 
 								placeholder="Answer {{$index + 1}}" 
 								tabindex="{{$index}}" />
+								
 						<button 
 								ng-click="moveAnswerUp($index)" 
 								class="answerUp left btn btn-default" 
@@ -50,26 +51,36 @@
 						<button 
 								ng-click="moveAnswerDown($index)" 
 								class="btn buttonanswerDown left btn-default button" 
-								ng-class="{visibilityNone: $index == (answers.length - 1) || answers.length == 1}">
+								ng-class="{visibilityNone: $index == (poll.answers.length - 1) || poll.answers.length == 1}">
 									<i class="fa fa-arrow-down fa-2x"></i>
 						</button>
 						<button 
 								class="btn right button btn-danger" 
 								ng-click="removeAnswer($index)" 
-								ng-hide="answers.length === 1">
+								ng-hide="poll.answers.length <= 2">
 									<i class="fa fa-times fa-2x"></i>
 						</button>
 					</li>
 				</ul>
 				<div class="controls">
+				<div class="errorMessages" ng-show="errorMessages.length >= 1">
+				<ul>
+				<li ng-repeat="error in errorMessages">
+					{{error}}
+				</li>
+				</ul>
+				</div>
+
 					<button 
 							class="btn button left btn-info" 
 							ng-click="addAnswer()" 
-							ng-hide="answers.length > 5">
+							ng-hide="poll.answers.length > 5">
 								<i class="fa fa-plus fa-2x"></i> 
 								<span class="alignMiddle">Add answer</span>
 					</button>
-					<button class="btn button right btn-success"><i class="fa fa-2x fa-check"></i> Create Poll!</button>
+					<button ng-click="createPoll(question)" class="btn button right btn-success"><i class="fa fa-2x fa-check"></i> Create Poll!</button>
+					
+
 				</div>
 			</form>
 		</script>
