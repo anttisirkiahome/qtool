@@ -57,25 +57,17 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window) {
 		console.log('poll to be sent : ' , $scope.poll)
 	}
 
-	$scope.timeDec = function(event, direction) {
+	$scope.changeTime = function(direction, event) {
 		event.preventDefault();
-		changeTime(direction);
-	}
-
-	$scope.timeInc = function(event, direction) {
-		event.preventDefault();
-		changeTime(direction);
-	}
-
-	var changeTime = function(direction) {
 		var diff = 0;
+
 		if(direction == 'up') {
 			diff = diff + delta; 
 		} else if( direction == 'down') {
 			diff = diff - delta;
 		}
+
 		var timeInSeconds = parseInt($scope.duration.split(':')[1]) + parseInt($scope.duration.split(':')[0]) * 60 + diff;
-		
 		var tempMinutes = parseInt(timeInSeconds / 60);
 		var tempSeconds = timeInSeconds % 60;
 
@@ -85,7 +77,7 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window) {
 
 		$scope.poll.duration = tempMinutes * 60 + tempSeconds;
 		
-		// you could stringify the rest, but let's gake an easy route.. 
+		// you could stringify the rest, but let's take an easy route.. 
 		if(tempMinutes < 10) {
 			tempMinutes = '0' + tempMinutes;
 		}
