@@ -31,8 +31,8 @@
 		<script type="text/ng-template" id="newPoll">
 			<h2>New Poll</h2>
 			<hr />
-			<form class="question">
-				<input type="text" name="newQuestion" class="form-control" placeholder="Question" ng-model="poll.question" />
+			<form class="question" ng-submit="createPoll()">
+				<input type="text" name="newQuestion" class="form-control" placeholder="Question" ng-model="poll.question" pattern=".{5,}" title="Kysymyksen tulee olla vähintään 5 merkkiä pitkä." required/>
 				<hr />
 				<ul>
 					<li ng-repeat="answer in poll.answers track by $index">
@@ -40,7 +40,8 @@
 								ng-model="poll.answers[$index]" 
 								class="answer form-control left" 
 								placeholder="Answer {{$index + 1}}" 
-								tabindex="{{$index}}" />
+								required
+								pattern=".{2,}" title="Vastauksen tulee olla vähintään 2 merkkiä pitkä."/>
 								
 						<button 
 								ng-click="moveAnswerUp($index)" 
@@ -63,13 +64,7 @@
 					</li>
 				</ul>
 				<div class="controls">
-				<div class="errorMessages" ng-show="errorMessages.length >= 1">
-				<ul>
-				<li ng-repeat="error in errorMessages">
-					{{error}}
-				</li>
-				</ul>
-				</div>
+				
 
 					<button 
 							class="btn button left btn-info" 
@@ -78,7 +73,7 @@
 								<i class="fa fa-plus fa-2x"></i> 
 								<span class="alignMiddle">Add answer</span>
 					</button>
-					<button ng-click="createPoll(question)" class="btn button right btn-success"><i class="fa fa-2x fa-check"></i> Create Poll!</button>
+					<button type="submit" class="btn button right btn-success"><i class="fa fa-2x fa-check"></i> Create Poll!</button>
 					
 
 				</div>
