@@ -10,7 +10,9 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window) {
 	//init app status
 	$scope.creatingNewPoll = false;
 	$scope.currentTemplate = 'defaultTemplate';
-	$scope.poll = {'question': '', 'answers': ['', '']};
+	$scope.poll = {'question': '', 'duration': 0, 'answers': ['', '']};
+	$scope.duration = '01:30';
+	var delta = 15;
 
 	$scope.loginSubmit = function() {
 		//FIXME temp solution
@@ -53,6 +55,45 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window) {
 
 	$scope.createPoll = function() {
 		console.log('poll to be sent : ' , $scope.poll)
+	}
+
+	$scope.timeDec = function(event, direction) {
+		event.preventDefault();
+		changeTime(direction);
+	}
+
+	$scope.timeInc = function(event, direction) {
+		event.preventDefault();
+		changeTime(direction);
+	}
+
+	var changeTime = function(direction) {
+		var diff = 0;
+		if(direction == 'up') {
+			diff = diff + delta; 
+		} else if( direction == 'down') {
+			diff = diff - delta;
+		}
+		var timeInSeconds = parseInt($scope.duration.split(':')[1]) + parseInt($scope.duration.split(':')[0]) * 60 + diff;
+		var tempSeconds = timeInSeconds % 60;
+		if(tempSeconds <= 0) {
+			tempSeconds = 0;
+		}
+		var tempMinutes = parseInt(timeInSeconds / 60);
+
+		if(tempMinutes < 10) {
+			tempMinutes = '0' + tempMinutes;
+		}
+		if(tempSeconds == 0) {
+			tempSeconds = '0' + tempSeconds;
+		}
+		
+		$scope.duration = tempMinutes + ':' + tempSeconds;
+		
+		
+		
+
+
 	}
 
 

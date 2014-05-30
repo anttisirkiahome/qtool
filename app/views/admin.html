@@ -63,6 +63,13 @@
 						</button>
 					</li>
 				</ul>
+				<hr />
+					<button class="btn left btn-default button timeValue" ng-click="timeDec($event, 'down')">-</button>
+					<input type="text" required ng-model="duration" value="{{duration}}" class="form-control timepicker left" readonly/>
+					<button class="btn left btn-default button timeValue" ng-click="timeInc($event, 'up')">+</button>			
+			<div class="clearfix"></div> <!-- clearfix is just lazy, so FIXME -->
+				<hr />
+
 				<div class="controls">
 				
 

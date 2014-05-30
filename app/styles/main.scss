@@ -177,6 +177,10 @@ body {
 }
 
 .question {
+    .timepicker {
+        width: 20%;
+    }
+
     button {
         margin: 0 4px;
     }
@@ -200,6 +204,10 @@ body {
             }
         }
     }
+    #duration {
+        width: 30%;
+        min-width: 120px;
+    }
 }
 
 .controls {
@@ -219,4 +227,8 @@ body {
 
 .visibilityNone {
     visibility: hidden;
+}
+.timeValue{
+    width: 42px;
+    height: 42px;
 }
