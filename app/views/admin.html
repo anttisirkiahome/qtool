@@ -65,14 +65,13 @@
 				</ul>
 				<hr />
 					<button class="btn left btn-default button timeValue" ng-click="changeTime('down', $event)">-</button>
-					<input type="text" required ng-model="duration" value="{{duration}}" class="form-control timepicker left" readonly/>
+					<input type="text" required ng-model="duration" value="{{duration}}" class="form-control timepicker left" readonly title="Aika on muodossa minuutit:sekunnit" />
 					<button class="btn left btn-default button timeValue" ng-click="changeTime('up', $event)">+</button>			
 			<div class="clearfix"></div> <!-- clearfix is just lazy, so FIXME -->
 				<hr />
-
+				teema tähän
+				<hr />
 				<div class="controls">
-				
-
 					<button 
 							class="btn button left btn-info" 
 							ng-click="addAnswer($event)" 

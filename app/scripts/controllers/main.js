@@ -6,7 +6,17 @@ qtoolControllers.controller('MainCtrl', function ($scope, Poller) {
 		
 });
 
-qtoolControllers.controller('AdminCtrl', function ($scope, $window) {
+qtoolControllers.controller('LoginCtrl', function ($scope, Auth) {
+		$scope.user = {'username':'', 'password':''};
+		$scope.login = function() {
+			console.log('clicked login', $scope.user)
+			var User = new Auth({'username':'a', 'password':'b'});
+			User.$save();
+		}
+});
+
+qtoolControllers.controller('AdminCtrl', function ($scope, $window, Poller, Auth) {
+	Auth.test();
 	//init app status
 	$scope.creatingNewPoll = false;
 	$scope.currentTemplate = 'defaultTemplate';
