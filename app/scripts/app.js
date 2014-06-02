@@ -34,12 +34,12 @@ qtoolApp.config(['$httpProvider', function($httpProvider) {
 qtoolApp.config(function ($routeProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl'
+        templateUrl: 'views/login.html',
+        controller: 'AdminCtrl'
       })
       .when('/login', {
         templateUrl: 'views/login.html',
-        controller: 'LoginCtrl'
+        controller: 'AdminCtrl'
       })
        .when('/admin', {
         templateUrl: 'views/admin.html',
@@ -48,4 +48,4 @@ qtoolApp.config(function ($routeProvider) {
       .otherwise({
         redirectTo: '/admin'
       });
-}).run(function(Poller) {});
+});

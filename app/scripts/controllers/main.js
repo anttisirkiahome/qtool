@@ -6,23 +6,21 @@ qtoolControllers.controller('MainCtrl', function ($scope, Poller) {
 		
 });
 
-qtoolControllers.controller('LoginCtrl', function ($scope, Auth) {
-		$scope.user = {'username':'', 'password':''};
-		$scope.login = function() {
-			console.log('clicked login', $scope.user)
-			var User = new Auth({'username':'a', 'password':'b'});
-			User.$save();
-		}
-});
-
-qtoolControllers.controller('AdminCtrl', function ($scope, $window, Poller, Auth) {
-	Auth.test();
+qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService) {
+	AuthService.auth();
 	//init app status
 	$scope.creatingNewPoll = false;
 	$scope.currentTemplate = 'defaultTemplate';
 	$scope.poll = {'question': '', 'duration': 0, 'answers': ['', '']};
 	$scope.duration = '01:30';
 	var delta = 15;
+
+	$scope.login = function() {
+		console.log('clicked login')
+		var user = {'username':$scope.user.username, 'password':$scope.user.password};
+		AuthService.auth(user);
+		window.location = "#/admin";
+	}
 
 	$scope.loginSubmit = function() {
 		//FIXME temp solution
