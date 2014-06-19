@@ -20,6 +20,8 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
 		'creatingNewPoll': true
 	}
 	$scope.currentTemplate = 'defaultTemplate';
+	$scope.showGenericError = false;
+	$scope.genericError = 'Kyselyn luonti epäonnistu, yritä uudestaan hetken kuluttua.';
 	var defaultPoll = {
 		'question': '', 
 		'duration': '01:30', 
@@ -78,17 +80,25 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
 	}
 
 	$scope.createPoll = function() {
+		$scope.showGenericError = false;
 		console.log('poll to be sent : ' , $scope.poll)
 		PollService.savePoll($scope.poll).then(function(data) {
 			if(data.success) {
+				console.log('poll has been sent, here is the response: ' , data)
 				//saved successfully
-				$scope.poll = defaultPoll;
+				//$scope.poll = defaultPoll; CALL THIS AFTER PUBLISHING
 				$scope.switchTemplate('createdPoll');
 
 			} else {
-			 	//saving failed
+			 	$scope.showGenericError = true;
 			}
 		});
+	}
+
+	$scope.publishPoll = function() {
+		console.log('publishing poll')
+		//if success
+		$scope.switchTemplate('defaultTemplate');
 	}
 
 	$scope.changeTime = function(direction, event) {
