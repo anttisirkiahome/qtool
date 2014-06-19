@@ -9,7 +9,7 @@
 						<h1 class="title">qTool<sup>2</sup></h1>
 				</div>
 				<div class="col-md-2">
-					<a ng-click="logout" class="right"><i class="fa fa-reply fa-4x" title="Logout"></i></a>
+					<a ng-click="logout()" class="right"><i class="fa fa-reply fa-4x" title="Logout"></i></a>
 				</div>
 			</div>
 		</div>
@@ -31,7 +31,7 @@
 		<script type="text/ng-template" id="newPoll">
 			<h2>New Poll</h2>
 			<hr />
-			<form class="question" ng-submit="createPoll()">
+			<form class="question" ng-submit="createPoll()" name="pollForm">
 				<input type="text" name="newQuestion" class="form-control" placeholder="Question" ng-model="poll.question" pattern=".{5,}" title="Kysymyksen tulee olla vähintään 5 merkkiä pitkä." required/>
 				<hr />
 				<ul>
@@ -47,29 +47,35 @@
 								ng-click="togglePosition('up', $index, $event)" 
 								class="answerUp left btn btn-default" 
 								ng-class="{visibilityNone: $index == 0}">
-									<i class="fa fa-arrow-up fa-2x"></i>
+									<i class="fa fa-arrow-up fa-2x" title="move answer up"></i>
 						</button>
 						<button 
 								ng-click="togglePosition('down', $index, $event)" 
 								class="btn buttonanswerDown left btn-default button" 
 								ng-class="{visibilityNone: $index == (poll.answers.length - 1) || poll.answers.length == 1}">
-									<i class="fa fa-arrow-down fa-2x"></i>
+									<i class="fa fa-arrow-down fa-2x" title="move answer down"></i>
 						</button>
 						<button 
 								class="btn right button btn-danger" 
 								ng-click="removeAnswer($index, $event)" 
 								ng-hide="poll.answers.length <= 2">
-									<i class="fa fa-times fa-2x"></i>
+									<i class="fa fa-times fa-2x" title="remove"></i>
 						</button>
 					</li>
 				</ul>
 				<hr />
 					<button class="btn left btn-default button timeValue" ng-click="changeTime('down', $event)">-</button>
-					<input type="text" required ng-model="duration" value="{{duration}}" class="form-control timepicker left" readonly title="Aika on muodossa minuutit:sekunnit" />
+					<input type="text" required ng-model="poll.duration" value="{{poll.duration}}" class="form-control timepicker left" readonly title="Aika on muodossa minuutit:sekunnit" />
 					<button class="btn left btn-default button timeValue" ng-click="changeTime('up', $event)">+</button>			
 			<div class="clearfix"></div> <!-- clearfix is just lazy, so FIXME -->
 				<hr />
-				teema tähän
+				<pre>teema tähän.
+
+				Logiikka:
+					tietokannassa on css-tiedostojen nimet.
+					1. kysely kannasta, missä tiedostojen _pitäisi_ olla
+					2. injektoi css-tiedosto: https://github.com/Yappli/angular-css-injector
+				</pre>
 				<hr />
 				<div class="controls">
 					<button 
@@ -94,6 +100,10 @@
 			<hr />
 			<p>
 			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse eleifend est at dolor accumsan, a egestas erat condimentum. Cras ut tincidunt orci. Integer dui magna, lobortis eget urna in, rutrum rutrum est. Sed non volutpat odio. Integer massa lectus, ultricies sit amet egestas quis, suscipit sed libero. <br /> <br /> Phasellus quis diam et lacus vestibulum congue. Morbi molestie metus quis felis molestie fringilla. Aenean eget velit dapibus, mattis sapien sed, volutpat tortor. Nullam massa purus, feugiat nec massa et, consequat lobortis mauris. <br /> <br /> Sed blandit augue nec posuere tincidunt. Donec eget nisi auctor metus congue adipiscing. Donec consequat est metus, at sodales turpis bibendum nec. Quisque suscipit varius posuere. Curabitur venenatis, lacus sit amet ullamcorper hendrerit, nulla arcu tempus tortor, sed accumsan dui nisl ut lectus. Donec placerat leo sit amet ipsum fringilla, ut gravida lectus rhoncus. </p>
+		</script>
+		<script type="text/ng-template" id="createdPoll">
+			moi <br />
+			{{poll}}
 		</script>
 		
 </div>

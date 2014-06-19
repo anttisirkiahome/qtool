@@ -6,25 +6,41 @@ qtoolControllers.controller('MainCtrl', function ($scope, Poller) {
 		
 });
 
-qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService) {
-	AuthService.auth();
+qtoolControllers.controller('LoginCtrl', function ($scope, $rootScope, AuthService) {
+	$scope.login = function(user) {
+		AuthService.auth(user);
+	}
+});
+
+qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService, PollService) {
+	//this.auth();
+
 	//init app status
-	$scope.creatingNewPoll = false;
+	$scope.createStatus = {
+		'creatingNewPoll': true
+	}
 	$scope.currentTemplate = 'defaultTemplate';
-	$scope.poll = {'question': '', 'duration': 0, 'answers': ['', '']};
-	$scope.duration = '01:30';
+	var defaultPoll = {
+		'question': '', 
+		'duration': '01:30', 
+		'answers': ['', ''], 
+		'theme': 'default'
+	};
+
+	//use angular.copy so defaultPoll stays unaffected
+	$scope.poll = angular.copy(defaultPoll); 
+
 	var delta = 15;
 
-	$scope.login = function() {
-		console.log('clicked login')
-		var user = {'username':$scope.user.username, 'password':$scope.user.password};
-		AuthService.auth(user);
-		window.location = "#/admin";
+	var auth = function() {
+		//AuthService.auth(user);
 	}
 
-	$scope.loginSubmit = function() {
-		//FIXME temp solution
-		$window.location.href ="#/admin";
+	$scope.logout = function() {
+		console.log('clicked logout')
+
+		// call log out
+		window.location = "#/login";
 	}
 
 	// switch templates from menu clicks
@@ -63,6 +79,16 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService)
 
 	$scope.createPoll = function() {
 		console.log('poll to be sent : ' , $scope.poll)
+		PollService.savePoll($scope.poll).then(function(data) {
+			if(data.success) {
+				//saved successfully
+				$scope.poll = defaultPoll;
+				$scope.switchTemplate('createdPoll');
+
+			} else {
+			 	//saving failed
+			}
+		});
 	}
 
 	$scope.changeTime = function(direction, event) {
@@ -75,7 +101,7 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService)
 			diff = diff - delta;
 		}
 
-		var timeInSeconds = parseInt($scope.duration.split(':')[1]) + parseInt($scope.duration.split(':')[0]) * 60 + diff;
+		var timeInSeconds = parseInt($scope.poll.duration.split(':')[1]) + parseInt($scope.poll.duration.split(':')[0]) * 60 + diff;
 		var tempMinutes = parseInt(timeInSeconds / 60);
 		var tempSeconds = timeInSeconds % 60;
 
@@ -96,7 +122,7 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService)
 			tempSeconds = delta;
 		}
 		
-		$scope.duration = tempMinutes + ':' + tempSeconds;
+		$scope.poll.duration = tempMinutes + ':' + tempSeconds;
 	}
 
 

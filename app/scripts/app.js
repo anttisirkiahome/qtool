@@ -34,18 +34,18 @@ qtoolApp.config(['$httpProvider', function($httpProvider) {
 qtoolApp.config(function ($routeProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: 'views/login.html',
+        templateUrl: 'views/admin.html',
         controller: 'AdminCtrl'
       })
       .when('/login', {
         templateUrl: 'views/login.html',
-        controller: 'AdminCtrl'
+        controller: 'LoginCtrl'
       })
        .when('/admin', {
         templateUrl: 'views/admin.html',
         controller: 'AdminCtrl'
       })
       .otherwise({
-        redirectTo: '/admin'
+        redirectTo: '/login'
       });
 });
