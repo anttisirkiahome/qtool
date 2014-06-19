@@ -17,16 +17,9 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
 		console.log('getting latest poll');
 		var source = new EventSource("//localhost/qtool-api/test.php");
 		source.onmessage = function(event) {
-  			console.log('event',event)
-  
+  			console.log('event here: ',event)
 		  }
-			console.log('really getting latest poll')
-        	source.addEventListener('message', handleCallback(), false);
         };
-
-  var handleCallback = function (msg) {
-    	console.log('lulz ' , msg)
-    };
 
 	//this.auth();
 	
