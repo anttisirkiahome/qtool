@@ -13,14 +13,32 @@ qtoolControllers.controller('LoginCtrl', function ($scope, $rootScope, AuthServi
 });
 
 qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService, PollService) {
-	//this.auth();
+	var getLatestPoll = function() {
+		console.log('getting latest poll');
+		var source = new EventSource("//localhost/qtool-api/test.php");
+		source.onmessage = function(event) {
+  			console.log('event',event)
+  
+		  }
+			console.log('really getting latest poll')
+        	source.addEventListener('message', handleCallback(), false);
+        };
 
+  var handleCallback = function (msg) {
+    	console.log('lulz ' , msg)
+    };
+
+	//this.auth();
+	
 	//init app status
 	$scope.createStatus = {
 		'creatingNewPoll': true
 	}
+	//this.getLatestPoll();
+
 	$scope.currentTemplate = 'defaultTemplate';
 	$scope.showGenericError = false;
+	getLatestPoll();
 	$scope.genericError = 'Kyselyn luonti epäonnistu, yritä uudestaan hetken kuluttua.';
 	var defaultPoll = {
 		'question': '', 
@@ -35,6 +53,7 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
 	var delta = 15;
 
 	var auth = function() {
+		console.log('calling auth function');
 		//AuthService.auth(user);
 	}
 
