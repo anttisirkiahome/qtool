@@ -13,13 +13,9 @@ qtoolControllers.controller('LoginCtrl', function ($scope, $rootScope, AuthServi
 });
 
 qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService, PollService) {
-	var getLatestPoll = function() {
-		console.log('getting latest poll');
-		var source = new EventSource("//localhost/qtool-api/test.php");
-		source.onmessage = function(event) {
-  			console.log('event here: ',event)
-		  }
-        };
+	console.log('hello, this is adminctrl')
+
+	$scope.newPollAvailable = false;
 
 	//this.auth();
 	
@@ -27,11 +23,10 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
 	$scope.createStatus = {
 		'creatingNewPoll': true
 	}
-	//this.getLatestPoll();
 
 	$scope.currentTemplate = 'defaultTemplate';
 	$scope.showGenericError = false;
-	getLatestPoll();
+	$scope.newPollAvailable = false;
 	$scope.genericError = 'Kyselyn luonti epäonnistu, yritä uudestaan hetken kuluttua.';
 	var defaultPoll = {
 		'question': '', 
@@ -44,6 +39,23 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
 	$scope.poll = angular.copy(defaultPoll); 
 
 	var delta = 15;
+
+	var source = new EventSource("//localhost/qtool-api/poller.php");
+	$scope.pollStatus = {};
+
+	$scope.$watch(source.on, function() {
+		source.onmessage = function(event) {	
+			
+			if(angular.fromJson(event.data).j % 2 === 0) {
+				$scope.newPollAvailable = true;
+				
+			} else {
+				$scope.newPollAvailable = false;
+			}
+
+			$scope.$apply(); //this is important, so scope values are updated
+		}
+  	});
 
 	var auth = function() {
 		console.log('calling auth function');

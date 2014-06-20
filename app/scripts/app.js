@@ -25,10 +25,15 @@ qtoolApp.config(['$httpProvider', function($httpProvider) {
       });
     }
   }]);
+  if (!$httpProvider.defaults.headers.get) {
+    $httpProvider.defaults.headers.get = {};
+  }
   $httpProvider.defaults.headers.common = {};
   $httpProvider.defaults.headers.post = {};
   $httpProvider.defaults.headers.put = {};
   $httpProvider.defaults.headers.patch = {};
+
+   $httpProvider.defaults.headers.get['If-Modified-Since'] = '0';
 }]);
 
 qtoolApp.config(function ($routeProvider) {
