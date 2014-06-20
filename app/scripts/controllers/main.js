@@ -48,6 +48,9 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
 			
 			if(angular.fromJson(event.data).j % 2 === 0) {
 				$scope.newPollAvailable = true;
+				/*PollService.getLatestPoll().then(function(data) {
+					console.log('got this poll back ' , data);
+				});*/
 				
 			} else {
 				$scope.newPollAvailable = false;
@@ -67,6 +70,10 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
 
 		// call log out
 		window.location = "#/login";
+	}
+
+	$scope.erasePoll = function() {
+		$scope.poll = angular.copy(defaultPoll); 
 	}
 
 	// switch templates from menu clicks
@@ -108,11 +115,8 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
 		console.log('poll to be sent : ' , $scope.poll)
 		PollService.savePoll($scope.poll).then(function(data) {
 			if(data.success) {
-				console.log('poll has been sent, here is the response: ' , data)
-				//saved successfully
-				//$scope.poll = defaultPoll; CALL THIS AFTER PUBLISHING
+				$scope.poll = data.poll;
 				$scope.switchTemplate('createdPoll');
-
 			} else {
 			 	$scope.showGenericError = true;
 			}
@@ -121,8 +125,9 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
 
 	$scope.publishPoll = function() {
 		console.log('publishing poll')
+
 		//if success
-		$scope.switchTemplate('defaultTemplate');
+		//$scope.switchTemplate('defaultTemplate');
 	}
 
 	$scope.changeTime = function(direction, event) {
