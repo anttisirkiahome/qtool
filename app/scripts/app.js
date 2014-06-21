@@ -39,8 +39,8 @@ qtoolApp.config(['$httpProvider', function($httpProvider) {
 qtoolApp.config(function ($routeProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: 'views/admin.html',
-        controller: 'AdminCtrl'
+        templateUrl: 'views/main.html',
+        controller: 'MainCtrl'
       })
       .when('/login', {
         templateUrl: 'views/login.html',

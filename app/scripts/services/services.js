@@ -18,7 +18,10 @@ qtoolServices.service('AuthService', ['Auth', '$q', function(Auth, $q) {
 }]);
 
 qtoolServices.factory('Poll', ['$resource', function($resource) {
-	return $resource('//localhost/qtool-api/api/poll', {q: '@poll'}, {'query': {isArray: false}});
+	return $resource('//localhost/qtool-api/api/poll', {q: '@poll'}, {
+		query: {isArray: false}, 
+		update: {method:'PUT', params: {updateId: '@id'}}
+	});
 }]);
 
 qtoolServices.service('PollService', ['Poll', '$q', function(Poll, $q) {
@@ -31,12 +34,45 @@ qtoolServices.service('PollService', ['Poll', '$q', function(Poll, $q) {
 			});
 			return d.promise;
 		},
-		getLatestPoll: function() {
+		publishPoll: function(id) {
 			var d = $q.defer();
-			var result = Poll.query({}, function() {
+			console.log('pollservice, im updating this poll: ' , id);
+			var result = Poll.update({updateId:id}, function() {
+				console.log('updated this' , d.resolve(result))
 				d.resolve(result);
 			});
 			return d.promise;
+		},
+		getLatestPoll: function($scope, source) {
+			$scope.$watch(source.on, function() {
+				source.onmessage = function(event) {
+					$scope.newPollAvailable = false;
+					$scope.unpublishedPollAvailable = false;
+			
+					console.log('response ' , event.data)
+					var receivedData = angular.fromJson(event.data).newPoll;
+					if(receivedData.success) {
+						if(!receivedData.expired) {
+					//		console.log('new published poll available')
+							$scope.newPollAvailable = true;
+							$scope.latestPoll = receivedData;
+
+						} else if (receivedData.expired) {
+					//		console.log('new poll is available')	
+							$scope.unpublishedPollAvailable = true;
+							$scope.latestPoll = receivedData;
+							
+						}
+						
+
+					} else {
+					//	console.log('no unpublished polls available')
+						
+					}
+
+					$scope.$apply(); //this is important, so scope values are updated
+				}
+		  	});  
 		}
 	}
 }]);
