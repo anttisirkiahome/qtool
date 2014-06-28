@@ -1,1 +1,25 @@
-main {{latestPoll}}
+<div id="client">
+	<div ng-show="latestPoll.published && !latestPoll.expired">
+		<p class="pollQuestion">
+		{{latestPoll.question}}
+		</p>
+		<div class="pollAnswerContainer" ng-show="!hasVoted">
+			<ul>
+				<li ng-repeat="pollAnswerOption in latestPoll.answers">
+					<button ng-click="vote(pollAnswerOption.id)">{{pollAnswerOption.answer}}</button> 
+				</li>
+			</ul>
+		</div>
+		<div class="pollAnswerContainer" ng-show="hasVoted">
+			How many voted for what
+		</div>
+	</div>
+
+
+	<div ng-show="!latestPoll.published || latestPoll.expired">
+
+	<h3>No polls available at this time.</h3>
+
+	</div> 
+</div>
+{{latestPoll}}

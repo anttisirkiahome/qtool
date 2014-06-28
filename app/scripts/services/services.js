@@ -20,11 +20,11 @@ qtoolServices.service('AuthService', ['Auth', '$q', function(Auth, $q) {
 qtoolServices.factory('Poll', ['$resource', function($resource) {
 	return $resource('//localhost/qtool-api/api/poll', {q: '@poll'}, {
 		query: {isArray: false}, 
-		update: {method:'PUT', params: {updateId: '@id'}}
+		update: {method:'PUT', params: {updateId: '@id', type:'@vote'}}
 	});
 }]);
 
-qtoolServices.service('PollService', ['Poll', '$q', function(Poll, $q) {
+qtoolServices.service('PollService', ['Poll', '$q', 'cssInjector', function(Poll, $q, cssInjector) {
 	return {
 		savePoll: function(poll) {
 			var d = $q.defer();
@@ -43,19 +43,30 @@ qtoolServices.service('PollService', ['Poll', '$q', function(Poll, $q) {
 			});
 			return d.promise;
 		},
+		vote: function(id) {
+			var d = $q.defer();
+			var result = Poll.update({updateId:id, type: 'vote'}, function() {
+				console.log('updated this' , d.resolve(result))
+				d.resolve(result);
+			});
+			return d.promise;
+		},
 		getLatestPoll: function($scope, source) {
 			$scope.$watch(source.on, function() {
 				source.onmessage = function(event) {
 					$scope.newPollAvailable = false;
 					$scope.unpublishedPollAvailable = false;
 			
-					console.log('response ' , event.data)
+					//console.log('response ' , event.data)
 					var receivedData = angular.fromJson(event.data).newPoll;
 					if(receivedData.success) {
 						if(!receivedData.expired) {
 					//		console.log('new published poll available')
 							$scope.newPollAvailable = true;
 							$scope.latestPoll = receivedData;
+
+							console.log('injecting ' , receivedData.theme)
+							cssInjector.add(receivedData.theme);
 
 						} else if (receivedData.expired) {
 					//		console.log('new poll is available')	
@@ -69,9 +80,10 @@ qtoolServices.service('PollService', ['Poll', '$q', function(Poll, $q) {
 					//	console.log('no unpublished polls available')
 						
 					}
-
+					
 					$scope.$apply(); //this is important, so scope values are updated
 				}
+
 		  	});  
 		}
 	}

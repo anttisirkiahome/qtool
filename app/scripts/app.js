@@ -6,7 +6,8 @@ var qtoolApp = angular.module('qtoolApp', [
     'ngSanitize',
     'ngRoute',
     'qtoolControllers',
-    'qtoolServices'
+    'qtoolServices',
+    'angular.css.injector'
   ]);
 
 qtoolApp.config(['$httpProvider', function($httpProvider) {
@@ -32,8 +33,10 @@ qtoolApp.config(['$httpProvider', function($httpProvider) {
   $httpProvider.defaults.headers.post = {};
   $httpProvider.defaults.headers.put = {};
   $httpProvider.defaults.headers.patch = {};
+  $httpProvider.defaults.headers.get['If-Modified-Since'] = '0';
 
-   $httpProvider.defaults.headers.get['If-Modified-Since'] = '0';
+  $httpProvider.defaults.useXDomain = true;
+  delete $httpProvider.defaults.headers.common['X-Requested-With'];
 }]);
 
 qtoolApp.config(function ($routeProvider) {

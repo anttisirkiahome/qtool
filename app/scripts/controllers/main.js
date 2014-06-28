@@ -4,8 +4,17 @@ var qtoolControllers = angular.module('qtoolControllers', []);
 
 qtoolControllers.controller('MainCtrl', function ($scope, PollService) {
 		console.log('hello from main controller')
+		
+		$scope.hasVoted = false;
+
 		var source = new EventSource("//localhost/qtool-api/poller.php");
-		console.log(PollService.getLatestPoll($scope, source));
+		PollService.getLatestPoll($scope, source);	
+
+		$scope.vote = function(id) {
+			$scope.hasVoted = true;
+			console.log('voted for id : ' , id)
+			PollService.vote(id);
+		}
 
 });
 
@@ -114,6 +123,7 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
 	$scope.publishPoll = function() {
 		console.log('publishing poll with id: ' , $scope.latestPoll.ID)
 		PollService.publishPoll($scope.latestPoll.ID);
+		$scope.poll = angular.copy(defaultPoll); 
 
 		//if success
 		//$scope.switchTemplate('defaultTemplate');
