@@ -3,7 +3,16 @@
 var qtoolServices = angular.module('qtoolServices', ['ngResource']);
 
 qtoolServices.factory('Auth', function($resource) {
-	return $resource('//localhost/qtool-api/api/auth/');
+	return $resource('//localhost/qtool-api/api/auth/', {}, {
+		query: {isArray: false}
+	});
+});
+
+qtoolServices.factory('Themes', function($resource) {
+	console.log('this is themes factory')
+	return $resource('//localhost/qtool-api/api/poll/themes/', {}, {
+		query: {isArray: false}
+	});
 });
 
 qtoolServices.service('AuthService', ['Auth', '$q', function(Auth, $q) {
@@ -62,8 +71,17 @@ qtoolServices.service('PollService', ['Poll', '$q', 'cssInjector', function(Poll
 					if(receivedData.success) {
 						if(!receivedData.expired) {
 					//		console.log('new published poll available')
+
 							$scope.newPollAvailable = true;
 							$scope.latestPoll = receivedData;
+
+							for (var i = 0; i < $scope.latestPoll.answers.length; i++) {
+								if($scope.latestPoll.totalVotes > 0 && $scope.latestPoll.answers[i].votes > 0) {
+									$scope.latestPoll.answers[i]['barWidth'] = ($scope.latestPoll.answers[i].votes / $scope.latestPoll.totalVotes) * 100;	
+								} else {
+									$scope.latestPoll.answers[i]['barWidth'] = 0;
+								}
+							}
 
 							console.log('injecting ' , receivedData.theme)
 							cssInjector.add(receivedData.theme);

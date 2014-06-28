@@ -69,13 +69,12 @@
 					<button class="btn left btn-default button timeValue" ng-click="changeTime('up', $event)">+</button>			
 			<div class="clearfix"></div> <!-- clearfix is just lazy, so FIXME -->
 				<hr />
-				<pre>teema tähän.
-
-				Logiikka:
-					tietokannassa on css-tiedostojen nimet.
-					1. kysely kannasta, missä tiedostojen _pitäisi_ olla
-					2. injektoi css-tiedosto: https://github.com/Yappli/angular-css-injector
-				</pre>
+				<label>Select theme</label> <br />
+				<div class="dropdown">
+					<select name="theme" class="btn btn-default dropdown-toggle"  ng-model="poll.theme">
+						<option ng-repeat="theme in themes">{{theme.name}}</option>
+					<select>
+				</div>
 				<hr />
 				<div class="controls">
 					<button 

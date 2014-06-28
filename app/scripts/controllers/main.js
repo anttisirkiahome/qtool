@@ -24,7 +24,7 @@ qtoolControllers.controller('LoginCtrl', function ($scope, $rootScope, AuthServi
 	}
 });
 
-qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService, PollService) {
+qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService, PollService, Themes, $q) {
 	console.log('hello, this is adminctrl')
 
 
@@ -56,12 +56,25 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
 	$scope.pollStatus = {};
 
 	var source = new EventSource("//localhost/qtool-api/poller.php");
-	console.log(PollService.getLatestPoll($scope, source));
+	PollService.getLatestPoll($scope, source);
 
 	var auth = function() {
 		console.log('calling auth function');
 		//AuthService.auth(user);
 	}
+
+	
+	var getThemes = function() {
+		var d = $q.defer();
+		var result = Themes.query({}, function() {
+				d.resolve(result);
+			});
+		return d.promise;
+	}
+
+	getThemes().then(function(data) {
+		$scope.themes = data.jotain;
+	});
 
 	$scope.logout = function() {
 		console.log('clicked logout')

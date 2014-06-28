@@ -34,9 +34,6 @@ qtoolApp.config(['$httpProvider', function($httpProvider) {
   $httpProvider.defaults.headers.put = {};
   $httpProvider.defaults.headers.patch = {};
   $httpProvider.defaults.headers.get['If-Modified-Since'] = '0';
-
-  $httpProvider.defaults.useXDomain = true;
-  delete $httpProvider.defaults.headers.common['X-Requested-With'];
 }]);
 
 qtoolApp.config(function ($routeProvider) {
