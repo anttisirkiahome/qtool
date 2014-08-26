@@ -2,18 +2,21 @@
 
 var qtoolControllers = angular.module('qtoolControllers', []);
 
-qtoolControllers.controller('MainCtrl', function ($scope, PollService) {
+qtoolControllers.controller('MainCtrl', function ($scope, PollService, $cookieStore) {
 		console.log('hello from main controller')
 		
-		$scope.hasVoted = false;
-
 		var source = new EventSource("//localhost/qtool-api/poller.php");
 		PollService.getLatestPoll($scope, source);	
+		$scope.hasVoted = false;
+		
+		$scope.votes = $cookieStore.get('votes') || [];
 
 		$scope.vote = function(id) {
-			$scope.hasVoted = true;
-			console.log('voted for id : ' , id)
+			$scope.votes.push($scope.latestPoll.ID);
+			console.log('pushing id ' , $scope.latestPoll.ID)
+			$cookieStore.put('votes', $scope.votes);  // store voted ID:s in a cookie.	
 			PollService.vote(id);
+
 		}
 
 });
@@ -124,7 +127,7 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
 	$scope.createPoll = function() {
 		$scope.showGenericError = false;
 		console.log('poll to be sent : ' , $scope.poll)
-	
+
 		PollService.savePoll($scope.poll).then(function(data) {
 			if(data.success) {
 				$scope.switchTemplate('createdPoll');

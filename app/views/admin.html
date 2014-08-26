@@ -108,5 +108,5 @@
 		<div id="genericError" ng-show="showGenericError">{{genericError}}</div>
 
 		<div ng-show="newPollAvailable">Theres a poll going on! --> {{latestPoll}} <-- </div>
-		<div ng-show="unpublishedPollAvailable" ng-click="switchTemplate('newPoll')" ng-hide="latestPoll.published || !latestPoll.expired">Theres an unpublished poll available!</div>
+		<div ng-show="unpublishedPollAvailable" ng-click="switchTemplate('newPoll')" ng-hide="latestPoll.published || latestPoll.expired">Theres an unpublished poll available!</div>
 </div> 

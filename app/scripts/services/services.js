@@ -33,7 +33,7 @@ qtoolServices.factory('Poll', ['$resource', function($resource) {
 	});
 }]);
 
-qtoolServices.service('PollService', ['Poll', '$q', 'cssInjector', function(Poll, $q, cssInjector) {
+qtoolServices.service('PollService', ['Poll', '$q', 'cssInjector', '$cookieStore',  function(Poll, $q, cssInjector, $cookieStore) {
 	return {
 		savePoll: function(poll) {
 			var d = $q.defer();
@@ -49,7 +49,6 @@ qtoolServices.service('PollService', ['Poll', '$q', 'cssInjector', function(Poll
 			var result = Poll.update({updateId:id, duration:duration}, function() {
 				console.log('updated this' , d.resolve(result))
 				d.resolve(result);
-
 			});
 			return d.promise;
 		},
@@ -64,14 +63,22 @@ qtoolServices.service('PollService', ['Poll', '$q', 'cssInjector', function(Poll
 		getLatestPoll: function($scope, source) {
 			$scope.$watch(source.on, function() {
 				source.onmessage = function(event) {
+
 					$scope.newPollAvailable = false;
 					$scope.unpublishedPollAvailable = false;
-			
-					//console.log('response ' , event.data)
+					
 					var receivedData = angular.fromJson(event.data).newPoll;
 					if(receivedData.success) {
 						if(!receivedData.expired) {
-							console.log('new published poll available', receivedData)
+							
+							// Handle if the user has already voted
+							if($cookieStore.get('votes').indexOf(receivedData.ID) !== -1) {
+								$scope.hasVoted = true; //person has already voted for this poll ID
+							}  else {
+								$scope.latestPoll.ID
+							}
+
+							//console.log('new published poll available', receivedData)
 
 							$scope.newPollAvailable = true;
 							$scope.latestPoll = receivedData;
@@ -83,11 +90,12 @@ qtoolServices.service('PollService', ['Poll', '$q', 'cssInjector', function(Poll
 									$scope.latestPoll.answers[i]['barWidth'] = 0;
 								}
 							}
-		
+							cssInjector.removeAll();
 							cssInjector.add(receivedData.theme);
 
 						} else if (receivedData.expired) {
-							console.log('new poll is available', receivedData)	
+						
+							//console.log('new poll is available', receivedData)	
 							$scope.unpublishedPollAvailable = true;
 							$scope.latestPoll = receivedData;
 							
