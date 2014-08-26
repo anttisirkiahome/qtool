@@ -35,6 +35,8 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
 		'creatingNewPoll': true
 	}
 
+
+
 	$scope.currentTemplate = 'defaultTemplate';
 	$scope.newPollAvailable = false;
 	$scope.unpublishedPollAvailable = false;
@@ -73,7 +75,7 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
 	}
 
 	getThemes().then(function(data) {
-		$scope.themes = data.jotain;
+		$scope.themes = data;
 	});
 
 	$scope.logout = function() {
@@ -134,8 +136,12 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
 	}
 
 	$scope.publishPoll = function() {
+
 		console.log('publishing poll with id: ' , $scope.latestPoll.ID)
-		PollService.publishPoll($scope.latestPoll.ID);
+		console.log('publishing poll with duration: ' , $scope.latestPoll.duration)
+		PollService.publishPoll($scope.latestPoll.ID, $scope.latestPoll.duration).then(function(data) {
+			console.log('publish successful',data)
+		});
 		$scope.poll = angular.copy(defaultPoll); 
 
 		//if success

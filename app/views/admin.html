@@ -70,6 +70,7 @@
 			<div class="clearfix"></div> <!-- clearfix is just lazy, so FIXME -->
 				<hr />
 				<label>Select theme</label> <br />
+				THEMES : {{selectPollThemePlaceholder}}
 				<div class="dropdown">
 					<select name="theme" class="btn btn-default dropdown-toggle"  ng-model="poll.theme">
 						<option ng-repeat="theme in themes">{{theme.name}}</option>
@@ -85,8 +86,6 @@
 								<span class="alignMiddle">Add answer</span>
 					</button>
 					<button type="submit" class="btn button right btn-success"><i class="fa fa-2x fa-check"></i> Create Poll!</button>
-					
-
 				</div>
 			</form>
 		</script>

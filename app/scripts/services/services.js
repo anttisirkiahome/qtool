@@ -11,7 +11,7 @@ qtoolServices.factory('Auth', function($resource) {
 qtoolServices.factory('Themes', function($resource) {
 	console.log('this is themes factory')
 	return $resource('//localhost/qtool-api/api/poll/themes/', {}, {
-		query: {isArray: false}
+		query: {isArray: true}
 	});
 });
 
@@ -43,10 +43,10 @@ qtoolServices.service('PollService', ['Poll', '$q', 'cssInjector', function(Poll
 			});
 			return d.promise;
 		},
-		publishPoll: function(id) {
+		publishPoll: function(id, duration) {
 			var d = $q.defer();
-			console.log('pollservice, im updating this poll: ' , id);
-			var result = Poll.update({updateId:id}, function() {
+			console.log('pollservice, im updating this poll: ' , id, duration);
+			var result = Poll.update({updateId:id, duration:duration}, function() {
 				console.log('updated this' , d.resolve(result))
 				d.resolve(result);
 			});
@@ -83,8 +83,8 @@ qtoolServices.service('PollService', ['Poll', '$q', 'cssInjector', function(Poll
 								}
 							}
 
-							console.log('injecting ' , receivedData.theme)
-							cssInjector.add(receivedData.theme);
+							//console.log('injecting ' , receivedData.theme)
+							//cssInjector.add(receivedData.theme);
 
 						} else if (receivedData.expired) {
 					//		console.log('new poll is available')	
