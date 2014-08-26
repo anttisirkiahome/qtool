@@ -70,7 +70,6 @@
 			<div class="clearfix"></div> <!-- clearfix is just lazy, so FIXME -->
 				<hr />
 				<label>Select theme</label> <br />
-				THEMES : {{selectPollThemePlaceholder}}
 				<div class="dropdown">
 					<select name="theme" class="btn btn-default dropdown-toggle"  ng-model="poll.theme">
 						<option ng-repeat="theme in themes">{{theme.name}}</option>
@@ -100,14 +99,14 @@
 			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse eleifend est at dolor accumsan, a egestas erat condimentum. Cras ut tincidunt orci. Integer dui magna, lobortis eget urna in, rutrum rutrum est. Sed non volutpat odio. Integer massa lectus, ultricies sit amet egestas quis, suscipit sed libero. <br /> <br /> Phasellus quis diam et lacus vestibulum congue. Morbi molestie metus quis felis molestie fringilla. Aenean eget velit dapibus, mattis sapien sed, volutpat tortor. Nullam massa purus, feugiat nec massa et, consequat lobortis mauris. <br /> <br /> Sed blandit augue nec posuere tincidunt. Donec eget nisi auctor metus congue adipiscing. Donec consequat est metus, at sodales turpis bibendum nec. Quisque suscipit varius posuere. Curabitur venenatis, lacus sit amet ullamcorper hendrerit, nulla arcu tempus tortor, sed accumsan dui nisl ut lectus. Donec placerat leo sit amet ipsum fringilla, ut gravida lectus rhoncus. </p>
 		</script>
 		<script type="text/ng-template" id="createdPoll">
-			moi <br />
-			{{poll}}
+			<h3>This is the latest poll<br />What would you like to do?</h3> <br />
+			{{latestPoll}}
 			<br /> <br />
-			<button class="btn button btn-warning" ng-click="switchTemplate('newPoll')">Edit poll</button>
-			<button class="btn button btn-success" ng-click="publishPoll()">Publish poll</button>
+			<button class="btn button btn-warning" ng-click="switchTemplate('newPoll')" ng-hide="!latestPoll.expired || latestPolll.published">Edit poll</button>
+			<button class="btn button btn-success" ng-click="publishPoll(); switchTemplate('defaultTemplate')" ng-hide="!latestPoll.expired || latestPolll.published">Publish poll</button>
 		</script>
 		<div id="genericError" ng-show="showGenericError">{{genericError}}</div>
 
-		<div ng-show="newPollAvailable">published available --> {{latestPoll}} <-- </div>
-		<div ng-show="unpublishedPollAvailable">unpublished available --> {{latestPoll}} <-- </div>
+		<div ng-show="newPollAvailable">Theres a poll going on! --> {{latestPoll}} <-- </div>
+		<div ng-show="unpublishedPollAvailable" ng-click="switchTemplate('newPoll')" ng-hide="latestPoll.published || !latestPoll.expired">Theres an unpublished poll available!</div>
 </div> 

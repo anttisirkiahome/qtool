@@ -35,8 +35,6 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
 		'creatingNewPoll': true
 	}
 
-
-
 	$scope.currentTemplate = 'defaultTemplate';
 	$scope.newPollAvailable = false;
 	$scope.unpublishedPollAvailable = false;
@@ -126,6 +124,7 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
 	$scope.createPoll = function() {
 		$scope.showGenericError = false;
 		console.log('poll to be sent : ' , $scope.poll)
+	
 		PollService.savePoll($scope.poll).then(function(data) {
 			if(data.success) {
 				$scope.switchTemplate('createdPoll');

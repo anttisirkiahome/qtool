@@ -49,6 +49,7 @@ qtoolServices.service('PollService', ['Poll', '$q', 'cssInjector', function(Poll
 			var result = Poll.update({updateId:id, duration:duration}, function() {
 				console.log('updated this' , d.resolve(result))
 				d.resolve(result);
+
 			});
 			return d.promise;
 		},
@@ -70,7 +71,7 @@ qtoolServices.service('PollService', ['Poll', '$q', 'cssInjector', function(Poll
 					var receivedData = angular.fromJson(event.data).newPoll;
 					if(receivedData.success) {
 						if(!receivedData.expired) {
-					//		console.log('new published poll available')
+							console.log('new published poll available', receivedData)
 
 							$scope.newPollAvailable = true;
 							$scope.latestPoll = receivedData;
@@ -82,12 +83,11 @@ qtoolServices.service('PollService', ['Poll', '$q', 'cssInjector', function(Poll
 									$scope.latestPoll.answers[i]['barWidth'] = 0;
 								}
 							}
-
-							//console.log('injecting ' , receivedData.theme)
-							//cssInjector.add(receivedData.theme);
+		
+							cssInjector.add(receivedData.theme);
 
 						} else if (receivedData.expired) {
-					//		console.log('new poll is available')	
+							console.log('new poll is available', receivedData)	
 							$scope.unpublishedPollAvailable = true;
 							$scope.latestPoll = receivedData;
 							
