@@ -29,6 +29,24 @@ qtoolServices.service('AuthService', ['Auth', '$q', function(Auth, $q) {
 	}
 }]);
 
+qtoolServices.factory('History', function($resource) {
+	return $resource('//localhost/qtool-api/api/poll/history/', {}, {
+		query: {isArray: false}
+	});
+});
+
+qtoolServices.service('HistoryService', ['History', '$q', function(History, $q) {
+	return {
+		getHistory: function() {
+			var d = $q.defer();
+			var result = History.query({}, function() {
+				d.resolve(result);
+			});
+			return d.promise;
+		}
+	}
+}]);
+
 qtoolServices.factory('Poll', ['$resource', function($resource) {
 	return $resource('//localhost/qtool-api/api/poll', {q: '@poll'}, {
 		query: {isArray: false}, 
@@ -92,57 +110,6 @@ qtoolServices.service('PollService', ['Poll', '$q', 'cssInjector', '$cookieStore
 					$scope.$apply(); // is this a best practice? ... are there other ways?
 				}
 			});
-			/* $scope.$watch(source.on, function() {
-				source.onmessage = function(event) {
-
-					$scope.newPollAvailable = false;
-					$scope.unpublishedPollAvailable = false;
-					
-					var receivedData = angular.fromJson(event.data).newPoll;
-					if(receivedData.success) {
-						if(!receivedData.expired) {
-							
-							// Handle if the user has already voted
-							if($cookieStore.get('votes').indexOf(receivedData.ID) !== -1) {
-								$scope.hasVoted = true; //person has already voted for this poll ID
-							}  else {
-								$scope.hasVoted = false;
-							}
-
-							//console.log('new published poll available', receivedData)
-
-							$scope.newPollAvailable = true;
-							$scope.latestPoll = receivedData;
-
-							for (var i = 0; i < $scope.latestPoll.answers.length; i++) {
-								if($scope.latestPoll.totalVotes > 0 && $scope.latestPoll.answers[i].votes > 0) {
-									$scope.latestPoll.answers[i]['barWidth'] = ($scope.latestPoll.answers[i].votes / $scope.latestPoll.totalVotes) * 100;	
-								} else {
-									$scope.latestPoll.answers[i]['barWidth'] = 0;
-								}
-							}
-							
-							
-
-						} else if (receivedData.expired) {
-						
-							console.log('new unpoblished poll is available', receivedData)	
-							$scope.unpublishedPollAvailable = true;
-							//$scope.latestPoll = receivedData;
-							$scope.unpublishedPoll = receivedData;
-							
-						}
-						cssInjector.add(receivedData.theme);
-
-					} else {
-					//	console.log('no unpublished polls available')
-						
-					}
-					
-					$scope.$apply(); //this is important, so scope values are updated
-				}
-
-		  	});  */
 		}
 	}
 }]);

@@ -5,8 +5,17 @@
 	<div class="contentContainer">
 		<div class="menuContainer">
 				<ul>
-					<li class="rounded10"><a ng-click="switchTemplate('newPoll')"><i class="fa fa-plus fa-2x"></i> <span class="right">New poll<span></a></li>
-					<li class="rounded10"><a ng-click="switchTemplate('editUsers')"><i class="fa fa-child fa-2x"></i> <span class="right">Users</span></a></li>
+					<a>
+						<li class="rounded10" ng-click="switchTemplate('newPoll')">
+					      	<i class="fa fa-plus fa-2x"></i>  
+					      	<span class="right">
+					      		New poll 
+				      		</span>
+			      		</li>
+		      		</a>
+					<li class="rounded10"><a ng-click="switchTemplate('previousPolls')">	
+						<i class="fa fa-book fa-2x"></i>  <span class="right">History  </span></a></li>
+					<li class="rounded10"><a ng-click="switchTemplate('editUsers')">		<i class="fa fa-child fa-2x"></i> <span class="right">Users    </span></a></li>
 				</ul>
 		</div>
 		<div class="contents">
@@ -19,126 +28,126 @@
 <!-- templates --> 
 <script type="text/ng-template" id="newPoll">
 <div id="newPollContainer">
-		<div id="newPollForm" class="rounded10">
-			<h3>Create</h3>
+	<div id="newPollForm" class="rounded10">
+		<h3>Create</h3>
 		<form class="question" ng-submit="previewPoll()" name="pollForm" ng-model="pollPreview">
-				<input type="text" name="newQuestion" class="form-control" placeholder="Question" ng-model="pollPreview.question" pattern=".{5,}" title="The question needs to be at least 5 characters long" required/>
-				<hr />
+			<input type="text" name="newQuestion" class="form-control" placeholder="Question" ng-model="pollPreview.question" pattern=".{5,}" title="The question needs to be at least 5 characters long" required/>
+			<hr />
+			<ul>
+				<li ng-repeat="answer in pollPreview.answers track by $index">
+					<input 	type="text" 
+							ng-model="pollPreview.answers[$index]" 
+							class="answer form-control left" 
+							placeholder="Answer {{$index + 1}}" 
+							required
+							pattern=".{2,}" title="The answer needs to be at least 2 characters long"/>
+							
+					<button 
+							ng-click="togglePosition('up', $index, $event)" 
+							class="answerUp answerControlButton left btn btn-default" 
+							ng-class="{visibilityNone: $index == 0}">
+								<i class="fa fa-arrow-up fa-2x" title="Move answer up"></i>
+					</button>
+					<button 
+							ng-click="togglePosition('down', $index, $event)" 
+							class="btn answerControlButton buttonanswerDown left btn-default button" 
+							ng-class="{visibilityNone: $index == (pollPreview.answers.length - 1) || pollPreview.answers.length == 1}">
+								<i class="fa fa-arrow-down fa-2x" title="Move answer down"></i>
+					</button>
+					<button 
+							class="btn answerControlButton left button btn-danger" 
+							ng-click="removeAnswer($index, $event)" 
+							ng-hide="pollPreview.answers.length <= 2">
+								<i class="fa fa-times fa-2x" title="Remove"></i>
+					</button>
+				</li>
+			</ul>
+			<div class="controls">
+			<button 
+				class="btn button left btn-info" 
+				ng-click="addAnswer($event)" 
+				ng-hide="pollPreview.answers.length > 5">
+					<i class="fa fa-plus fa-2x"></i> 
+					<span class="alignMiddle">Add answer</span>
+				</button>
+			</div>
+				<div class="clearfix"></div>
+			<hr />
+			<label>Duration (min:sec)</label> 
+			<br />
+			<button class="btn left btn-default button timeValue" ng-click="changeTime('down', $event)">-</button>
+			<input type="text" required ng-model="pollPreview.duration" value="{{pollPreview.duration}}" class="form-control timepicker left" readonly />
+			<button class="btn left btn-default button timeValue" ng-click="changeTime('up', $event)">+</button>			
+			<div class="clearfix"></div> <!-- clearfix is just lazy, so FIXME -->
+			<hr />
+			<label>Select a theme</label>
+			<br />
+			<div class="dropdown">
+				<select name="theme" class="btn btn-default dropdown-toggle"  ng-model="pollPreview.themeUrl" ng-init="pollPreview.themes[0].url">
+					<option ng-repeat="theme in pollPreview.themes" value="{{theme.url}}">{{theme.name}}</option>
+				<select>
+			</div>
+			<hr />
+			<div class="controls">
+				<button type="submit" class="btn button right btn-success" ng-click="publishPoll()"><i class="fa fa-2x fa-check"></i>Publish Poll!</button>
+			</div> 
+		</form>
+	</div>
+
+	<!-- LIVE POLL-->
+	<div class="rounded10 poll livePoll" ng-show="publishedPollAvailable">
+		<h3 class="left">Live Poll</h3>
+		<span class="right">
+			<b>Time remaining:</b> {{livePoll.timeLeft}} seconds
+		</span>
+		<div class="pollContainer">
+			<div class="pollInfo">
+				<h4 class="pollAnswer left">
+					{{livePoll.question}}
+				</h4>
+				
+			</div>
+			<div class="pollAnswerContainer">
 				<ul>
-					<li ng-repeat="answer in pollPreview.answers track by $index">
-						<input 	type="text" 
-								ng-model="pollPreview.answers[$index]" 
-								class="answer form-control left" 
-								placeholder="Answer {{$index + 1}}" 
-								required
-								pattern=".{2,}" title="The answer needs to be at least 2 characters long"/>
-								
-						<button 
-								ng-click="togglePosition('up', $index, $event)" 
-								class="answerUp answerControlButton left btn btn-default" 
-								ng-class="{visibilityNone: $index == 0}">
-									<i class="fa fa-arrow-up fa-2x" title="Move answer up"></i>
-						</button>
-						<button 
-								ng-click="togglePosition('down', $index, $event)" 
-								class="btn answerControlButton buttonanswerDown left btn-default button" 
-								ng-class="{visibilityNone: $index == (pollPreview.answers.length - 1) || pollPreview.answers.length == 1}">
-									<i class="fa fa-arrow-down fa-2x" title="Move answer down"></i>
-						</button>
-						<button 
-								class="btn answerControlButton left button btn-danger" 
-								ng-click="removeAnswer($index, $event)" 
-								ng-hide="pollPreview.answers.length <= 2">
-									<i class="fa fa-times fa-2x" title="Remove"></i>
-						</button>
+					<li ng-repeat="answer in livePoll.answers">
+						<span class="answer">{{answer.answer}}</span> ({{answer.votes}} votes)
+						<div class="voteBar" style="width:{{answer.barWidth}}%">{{answer.barWidth | number:0}}% </div>
+						
 					</li>
 				</ul>
-				<div class="controls">
-				<button 
-							class="btn button left btn-info" 
-							ng-click="addAnswer($event)" 
-							ng-hide="pollPreview.answers.length > 5">
-								<i class="fa fa-plus fa-2x"></i> 
-								<span class="alignMiddle">Add answer</span>
-					</button>
-				</div>
-					<div class="clearfix"></div>
-				<hr />
-					<label>Duration (min:sec)</label> <br />
-					<button class="btn left btn-default button timeValue" ng-click="changeTime('down', $event)">-</button>
-					<input type="text" required ng-model="pollPreview.duration" value="{{pollPreview.duration}}" class="form-control timepicker left" readonly />
-					<button class="btn left btn-default button timeValue" ng-click="changeTime('up', $event)">+</button>			
-			<div class="clearfix"></div> <!-- clearfix is just lazy, so FIXME -->
-				<hr />
-				<label>Select a theme</label> <br />
-				<div class="dropdown">
-					<select name="theme" class="btn btn-default dropdown-toggle"  ng-model="pollPreview.themeUrl" ng-init="pollPreview.themes[0].url">
-						<option ng-repeat="theme in pollPreview.themes" value="{{theme.url}}">{{theme.name}}</option>
-					<select>
-				</div>
-				<hr />
-				 <div class="controls">
-					<button type="submit" class="btn button right btn-success" ng-click="publishPoll()"><i class="fa fa-2x fa-check"></i>Publish Poll!</button>
-				</div> 
-			</form>
-		</div>
-
-		<!-- LIVE POLL-->
-		<div class="rounded10 poll livePoll" ng-show="publishedPollAvailable">
-			<h3 class="left">Live Poll</h3>
-			<span class="right">
-				<b>Time remaining:</b> {{livePoll.timeLeft}} seconds
-			</span>
-			<div class="pollContainer">
-				<div class="pollInfo">
-					<h4 class="pollAnswer left">
-						{{livePoll.question}}
-					</h4>
-					
-				</div>
-				<div class="pollAnswerContainer">
-					<ul>
-						<li ng-repeat="answer in livePoll.answers">
-							<span class="answer">{{answer.answer}}</span> ({{answer.votes}} votes)
-							<div class="voteBar" style="width:{{answer.barWidth}}%">{{answer.barWidth | number:0}}% </div>
-							
-						</li>
-					</ul>
-				</div>
 			</div>
-			<hr />
 		</div>
+		<hr />
+	</div>
 
-		<!-- Poll PREVIEW -->
-		<div class="rounded10 poll">
-			<h3 class="left">Preview</h3>
-			<span class="right">
-				<b>Poll duration:</b> {{pollPreview.duration}}
-			</span>
-			<div class="pollContainer">
-				<div class="pollInfo">
-					<h4 class="pollAnswer left">
-						{{pollPreview.question}}
-					</h4>
-					
-				</div>
-				<div class="pollAnswerContainer">
-					<ul>
-						<li ng-repeat="pollAnswerOption in pollPreview.answers  track by $index" ng-show="pollAnswerOption.length > 1">
-							<button class="button btn">{{pollPreview.answers[$index]}}</button> 
-						</li>
-					</ul>
-						</div>
+	<!-- Poll PREVIEW -->
+	<div class="rounded10 poll">
+		<h3 class="left">Preview</h3>
+		<span class="right">
+			<b>Poll duration:</b> {{pollPreview.duration}}
+		</span>
+		<div class="pollContainer">
+			<div class="pollInfo">
+				<h4 class="pollAnswer left">
+					{{pollPreview.question}}
+				</h4>
+				
 			</div>
-			<hr />
+			<div class="pollAnswerContainer">
+				<ul>
+					<li ng-repeat="pollAnswerOption in pollPreview.answers  track by $index" ng-show="pollAnswerOption.length > 1">
+						<button class="button btn">{{pollPreview.answers[$index]}}</button> 
+					</li>
+				</ul>
+					</div>
 		</div>
-
+		<hr />
+	</div>
 </div>
-			</div>	
-			</div>
+</script>
 
-</div>
-		</div>
+<script type="text/ng-template" id="previousPolls" ng-controller="HistoryCtrl">
+moro
 </script>
 <hr />
 for debugging, $scope.livePoll:

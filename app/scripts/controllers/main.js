@@ -24,10 +24,28 @@ qtoolControllers.controller('LoginCtrl', function ($scope, $rootScope, AuthServi
 	}
 });
 
+qtoolControllers.controller('HistoryCtrl', function ($scope, HistoryService, $timeout) {
+	console.log('hello, says HistoryCtrl!')
+	HistoryService.getHistory().then(function(data) {
+		console.log('history received: ' , data)
+	});
+	
+	var longPoll = function() {
+		$timeout(function() {
+    		HistoryService.getHistory().then(function(data) {
+				console.log('history received: ' , data)
+			});
+			longPoll();
+		}, 10000); 
+	}
+	longPoll();
+});
+
+
 qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService, PollService, Themes, $q) {
 	
 	$scope.currentTemplate = 'newPoll'; //holds the current template ID
-	$scope.publishedPoll; //holds the latest published poll that is LIVE
+	$scope.livePoll; //holds the latest published poll that is LIVE
 	$scope.pollPreview; //holds the editable poll
 	$scope.genericErrorText = 'There was an error while creating the poll, please try again in a minute.';
 	var timeIncrement = 15; //default time increment in seconds, used for poll duration
@@ -81,6 +99,12 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
 				console.log(data) 
 			}
 		});	
+    }
+
+    //template controller. be careful, if template is not found, it is still 'loaded'...
+    //TODO missing validation
+    $scope.switchTemplate = function(template) {
+    	$scope.currentTemplate = template;
     }
 
 	//... here are the form CRUD controllers
