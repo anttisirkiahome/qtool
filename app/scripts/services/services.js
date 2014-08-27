@@ -69,13 +69,24 @@ qtoolServices.service('PollService', ['Poll', '$q', 'cssInjector', '$cookieStore
 						$scope.publishedPollAvailable = true; //this boolean is for the views ng-show
 						$scope.livePoll = receivedData;
 
+						for (var i = 0; i < $scope.livePoll.answers.length; i++) {
+							if($scope.livePoll.totalVotes > 0 && $scope.livePoll.answers[i].votes > 0) {
+								$scope.livePoll.answers[i]['barWidth'] = ($scope.livePoll.answers[i].votes / $scope.livePoll.totalVotes) * 100;	
+							} else {
+								$scope.livePoll.answers[i]['barWidth'] = 0;
+							}
+						}
+
 						// Handle if the user has already voted
 						if($cookieStore.get('votes').indexOf(receivedData.ID) !== -1) {
 							$scope.hasVoted = true; //person has already voted for this poll ID
 						}  else {
 							$scope.hasVoted = false;
 						}
+						
+						cssInjector.add(receivedData.theme);
 					} else {
+						cssInjector.removeAll(); 
 						$scope.publishedPollAvailable = false;
 					}
 					$scope.$apply(); // is this a best practice? ... are there other ways?

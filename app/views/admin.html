@@ -70,7 +70,7 @@
 					<button class="btn left btn-default button timeValue" ng-click="changeTime('up', $event)">+</button>			
 			<div class="clearfix"></div> <!-- clearfix is just lazy, so FIXME -->
 				<hr />
-				<label>Select theme</label> <br />
+				<label>Select a theme</label> <br />
 				<div class="dropdown">
 					<select name="theme" class="btn btn-default dropdown-toggle"  ng-model="pollPreview.themeUrl" ng-init="pollPreview.themes[0].url">
 						<option ng-repeat="theme in pollPreview.themes" value="{{theme.url}}">{{theme.name}}</option>
@@ -83,37 +83,11 @@
 			</form>
 		</div>
 
-
-	<!--<div id="livePoll" class="rounded10">
-			<h3>Poll is live!</h3>
-		</div>
-		<div id="pollPreview" class="rounded10">
-			<div ng-click="switchTemplate('newPoll')">
-				<h3>Preview</h3>
-				<div class="pollPreviewData">
-						<div id="client">
-			<div class="pollContainer">
-			<div>
-				<h3 class="pollQuestion left">
-					{{unpublishedPoll.question}}
-				</h3>
-				<span class="right">{{unpublishedPoll.duration}} sec</span>
-				<div class="pollAnswerContainer">
-					<ul>
-						<li ng-repeat="pollAnswerOption in unpublishedPoll.answers">
-							<button class="button btn">{{pollAnswerOption.answer}}</button> 
-						</li>
-					</ul>
-				</div>
-			</div>
-		 
-		</div> -->
-
 		<!-- LIVE POLL-->
-		<div class="rounded10 poll" ng-show="publishedPollAvailable">
-			<h3 class="left">Preview</h3>
+		<div class="rounded10 poll livePoll" ng-show="publishedPollAvailable">
+			<h3 class="left">Live Poll</h3>
 			<span class="right">
-				<b>Poll duration:</b> {{livePoll.duration}}
+				<b>Time remaining:</b> {{livePoll.timeLeft}} seconds
 			</span>
 			<div class="pollContainer">
 				<div class="pollInfo">
@@ -125,7 +99,7 @@
 				<div class="pollAnswerContainer">
 					<ul>
 						<li ng-repeat="answer in livePoll.answers">
-							<span class="answer">{{answer.answer}}</span>
+							<span class="answer">{{answer.answer}}</span> ({{answer.votes}} votes)
 							<div class="voteBar" style="width:{{answer.barWidth}}%">{{answer.barWidth | number:0}}% </div>
 							
 						</li>
@@ -162,15 +136,16 @@
 </div>
 			</div>	
 			</div>
-			<!-- <div class="controls">
 
-			<button type="submit" class="btn button right btn-success" ng-click="publishPoll()"><i class="fa fa-2x fa-check"></i> Publish Poll!</button>
-		</div> --> 
 </div>
 		</div>
 </script>
 <hr />
+for debugging, $scope.livePoll:
+<pre>
 {{livePoll}}
+</pre>
+
 <hr />
 for debugging, $scope.pollPreview:
 <pre>

@@ -11,7 +11,7 @@ qtoolControllers.controller('MainCtrl', function ($scope, PollService, $cookieSt
 		$scope.votes = $cookieStore.get('votes') || [];
 
 		$scope.vote = function(id) {
-			$scope.votes.push($scope.latestPoll.ID);
+			$scope.votes.push($scope.livePoll.ID);
 			$cookieStore.put('votes', $scope.votes);  // store voted ID:s in a cookie.	
 			PollService.vote(id);
 		}

@@ -1,18 +1,19 @@
 <div id="client">
-	<div ng-show="latestPoll.published && !latestPoll.expired">
+	<div class="pollContainer">
+	<div ng-show="livePoll.published && !livePoll.expired">
 		<h3 class="pollQuestion">
-		{{latestPoll.question}}
+		{{livePoll.question}}
 		</h3>
 		<div class="pollAnswerContainer" ng-show="!hasVoted">
 			<ul>
-				<li ng-repeat="pollAnswerOption in latestPoll.answers">
+				<li ng-repeat="pollAnswerOption in livePoll.answers">
 					<button ng-click="vote(pollAnswerOption.id)" class="button btn">{{pollAnswerOption.answer}}</button> 
 				</li>
 			</ul>
 		</div>
 		<div class="pollAnswerContainer" ng-show="hasVoted">
 			<ul>
-				<li ng-repeat="answer in latestPoll.answers">
+				<li ng-repeat="answer in livePoll.answers">
 					<span class="answer">{{answer.answer}}</span>
 					<div class="voteBar" style="width:{{answer.barWidth}}%">{{answer.barWidth | number:0}}% </div>
 					
@@ -20,7 +21,8 @@
 			</ul>
 		</div>
 	</div>
-	<div ng-show="!latestPoll.published || latestPoll.expired">
+	<div ng-show="!livePoll.published || livePoll.expired">
 		<h3>No polls available at this time.</h3>
 	</div> 
+</div>
 </div>
