@@ -27,7 +27,9 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
 body {
     padding-top: 20px;
     padding-bottom: 20px;
+    /*
     background: #e9e9e9 url('../images/tiny_grid.png') repeat 00;
+    */
     font: 13px/1.7em 'Open Sans';
     color: #333;
     font-family: "Helvetica Neue", Helvetica, Arial, sans serif;
@@ -129,7 +131,7 @@ body {
 .menu {
     ul {
         list-style: none;
-        padding: 0 0 0 4%;
+        padding: 0 0 16px 4%;
         margin: 0;
 
         .fa-plus {
@@ -200,7 +202,7 @@ body {
 
             input {
                 width: 60%;
-                margin-right: 6px;
+                
             }
         }
     }
@@ -211,7 +213,7 @@ body {
 }
 
 .controls {
-    margin-top: 16px;
+  
 
     .button {
         margin: 0;
@@ -235,4 +237,176 @@ body {
 .timeValue{
     width: 42px;
     height: 42px;
+}
+#livePoll {
+    margin-bottom: 16px;
+}
+
+#client {
+  width: 100% !important;
+  margin-top: 16px;
+}
+
+
+$defaultPadding: 16px;
+$red: #8F0000;
+$headerHight: 56px;
+$gray: #CDD1D1;
+$defaultMargin: 16px;
+
+#adminContainer {
+    /*border: 1px solid $gray; */
+    max-width: 960px;
+    width: 100%;
+    margin: 0 auto;
+    overflow: auto;
+    
+
+    #header {
+        padding: 0 $defaultPadding;
+        margin-left: $defaultPadding;
+        text-align: center;
+        /*background-color: #3385FF;*/
+        height: $headerHight;
+        width: 85%;
+        float: right;
+        border-bottom: 1px solid $gray;
+
+        i {
+            line-height: $headerHight;
+            vertical-align: middle;
+            color: $red;
+        }
+    }
+
+    .contentContainer {
+        width: 100%;
+
+        overflow: auto;
+        min-height: 480px;
+        display: table;
+        
+
+        .menuContainer {
+            
+            width: 15%;
+            min-width: 100px;
+            height: 100%;
+            float: left;
+            padding: $defaultPadding;
+
+            display: table-cell;
+
+            ul {
+                list-style: none;
+                padding: 0;
+                margin: 16px 0 0 0;
+
+                li {
+                    padding: 8px;
+
+                    &:hover {
+                        background-color: $gray;
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+
+        .contents {
+            overflow:auto;
+            width: 85%;
+            float: left;
+         border-left: 1px solid $gray;
+            padding: 22px;
+            display: table-cell;
+        }
+    }
+}
+
+#newPollContainer {
+
+    #newPollForm {
+        width: 50%;
+        height: auto;
+        border: 1px solid $gray;
+        float: left;
+        padding: $defaultPadding;
+
+
+
+        .question {
+            .answerControlButton {
+                margin: 0;
+                padding: 0;
+                height: 42px;
+                width: 42px;
+                margin-left: 4px;
+            }
+        }
+    }
+
+    #livePoll {
+        width: 48%;
+        height: auto;
+        border: 1px solid $gray;
+        float: right;
+        padding: $defaultPadding;
+    }
+    
+    #pollPreview {
+        width: 48%;
+        height: auto;
+        border: 1px solid $gray;
+        float: right;
+        padding: $defaultPadding;
+        clear: right;
+
+        .pollPreviewData {
+            width: 100%;
+            overflow: auto;
+        }
+    }
+}
+
+h3 {
+    padding: 0 0 $defaultPadding 0;
+    margin: 0;
+}
+
+ .poll {
+    width: 48%;
+    height: auto;
+    border: 1px solid $gray;
+    float: right;
+    padding: $defaultPadding;
+    clear: right;
+
+    .pollContainer {
+
+        .pollInfo {
+            width: 100%;
+            overflow: auto;
+
+            .pollAnswer {
+                padding: 0;
+            }
+        }
+
+        .pollAnswerContainer {
+            width: 100%;
+
+            ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+
+                li {
+                    padding: 0 0 $defaultPadding 0;
+                }
+            }
+        }
+        
+
+    }
 }

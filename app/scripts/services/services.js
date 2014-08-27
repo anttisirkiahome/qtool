@@ -2,6 +2,8 @@
 
 var qtoolServices = angular.module('qtoolServices', ['ngResource']);
 
+// NOTE using factories / services hand in hand like this might not be best practice
+
 qtoolServices.factory('Auth', function($resource) {
 	return $resource('//localhost/qtool-api/api/auth/', {}, {
 		query: {isArray: false}
@@ -22,6 +24,7 @@ qtoolServices.service('AuthService', ['Auth', '$q', function(Auth, $q) {
 			Auth.save(user);
 				// .. if logged id broadcast true
 				// else broadcast false	
+				// TODO any other ways than using $rootscope to broadcast?
 		}
 	}
 }]);
@@ -35,19 +38,13 @@ qtoolServices.factory('Poll', ['$resource', function($resource) {
 
 qtoolServices.service('PollService', ['Poll', '$q', 'cssInjector', '$cookieStore',  function(Poll, $q, cssInjector, $cookieStore) {
 	return {
+		changeTheme: function(themeUrl) {
+			cssInjector.removeAll(); 
+			cssInjector.add(themeUrl);
+		},
 		savePoll: function(poll) {
 			var d = $q.defer();
-			console.log('pollservice, im sending this poll: ' , poll);
 			var result = Poll.save({q:poll}, function() {
-				d.resolve(result);
-			});
-			return d.promise;
-		},
-		publishPoll: function(id, duration) {
-			var d = $q.defer();
-			console.log('pollservice, im updating this poll: ' , id, duration);
-			var result = Poll.update({updateId:id, duration:duration}, function() {
-				console.log('updated this' , d.resolve(result))
 				d.resolve(result);
 			});
 			return d.promise;
@@ -64,6 +61,29 @@ qtoolServices.service('PollService', ['Poll', '$q', 'cssInjector', '$cookieStore
 			$scope.$watch(source.on, function() {
 				source.onmessage = function(event) {
 
+					// TODO why do we need to use angular.fromJson here?
+					// this works, but...
+					var receivedData = angular.fromJson(event.data).newPoll;
+
+					if(receivedData.success && !receivedData.expired) {
+						$scope.publishedPollAvailable = true; //this boolean is for the views ng-show
+						$scope.livePoll = receivedData;
+
+						// Handle if the user has already voted
+						if($cookieStore.get('votes').indexOf(receivedData.ID) !== -1) {
+							$scope.hasVoted = true; //person has already voted for this poll ID
+						}  else {
+							$scope.hasVoted = false;
+						}
+					} else {
+						$scope.publishedPollAvailable = false;
+					}
+					$scope.$apply(); // is this a best practice? ... are there other ways?
+				}
+			});
+			/* $scope.$watch(source.on, function() {
+				source.onmessage = function(event) {
+
 					$scope.newPollAvailable = false;
 					$scope.unpublishedPollAvailable = false;
 					
@@ -75,7 +95,7 @@ qtoolServices.service('PollService', ['Poll', '$q', 'cssInjector', '$cookieStore
 							if($cookieStore.get('votes').indexOf(receivedData.ID) !== -1) {
 								$scope.hasVoted = true; //person has already voted for this poll ID
 							}  else {
-								$scope.latestPoll.ID
+								$scope.hasVoted = false;
 							}
 
 							//console.log('new published poll available', receivedData)
@@ -90,17 +110,18 @@ qtoolServices.service('PollService', ['Poll', '$q', 'cssInjector', '$cookieStore
 									$scope.latestPoll.answers[i]['barWidth'] = 0;
 								}
 							}
-							cssInjector.removeAll();
-							cssInjector.add(receivedData.theme);
+							
+							
 
 						} else if (receivedData.expired) {
 						
-							//console.log('new poll is available', receivedData)	
+							console.log('new unpoblished poll is available', receivedData)	
 							$scope.unpublishedPollAvailable = true;
-							$scope.latestPoll = receivedData;
+							//$scope.latestPoll = receivedData;
+							$scope.unpublishedPoll = receivedData;
 							
 						}
-						
+						cssInjector.add(receivedData.theme);
 
 					} else {
 					//	console.log('no unpublished polls available')
@@ -110,7 +131,7 @@ qtoolServices.service('PollService', ['Poll', '$q', 'cssInjector', '$cookieStore
 					$scope.$apply(); //this is important, so scope values are updated
 				}
 
-		  	});  
+		  	});  */
 		}
 	}
 }]);

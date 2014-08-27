@@ -3,8 +3,7 @@
 var qtoolControllers = angular.module('qtoolControllers', []);
 
 qtoolControllers.controller('MainCtrl', function ($scope, PollService, $cookieStore) {
-		console.log('hello from main controller')
-		
+
 		var source = new EventSource("//localhost/qtool-api/poller.php");
 		PollService.getLatestPoll($scope, source);	
 		$scope.hasVoted = false;
@@ -13,10 +12,8 @@ qtoolControllers.controller('MainCtrl', function ($scope, PollService, $cookieSt
 
 		$scope.vote = function(id) {
 			$scope.votes.push($scope.latestPoll.ID);
-			console.log('pushing id ' , $scope.latestPoll.ID)
 			$cookieStore.put('votes', $scope.votes);  // store voted ID:s in a cookie.	
 			PollService.vote(id);
-
 		}
 
 });
@@ -28,23 +25,15 @@ qtoolControllers.controller('LoginCtrl', function ($scope, $rootScope, AuthServi
 });
 
 qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService, PollService, Themes, $q) {
-	console.log('hello, this is adminctrl')
-
-
-	//this.auth();
 	
-	//init app status
-	$scope.createStatus = {
-		'creatingNewPoll': true
-	}
+	$scope.currentTemplate = 'newPoll'; //holds the current template ID
+	$scope.publishedPoll; //holds the latest published poll that is LIVE
+	$scope.pollPreview; //holds the editable poll
+	$scope.genericErrorText = 'There was an error while creating the poll, please try again in a minute.';
+	var timeIncrement = 15; //default time increment in seconds, used for poll duration
+	var source = new EventSource("//localhost/qtool-api/poller.php"); //polls for new polls / results (HTML5 pushstate)
 
-	$scope.currentTemplate = 'defaultTemplate';
-	$scope.newPollAvailable = false;
-	$scope.unpublishedPollAvailable = false;
-	$scope.showGenericError = false;
-	$scope.latestPoll;
-	$scope.newPollAvailable = false;
-	$scope.genericError = 'Kyselyn luonti epäonnistu, yritä uudestaan hetken kuluttua.';
+	//init default poll, plz don't touch this
 	var defaultPoll = {
 		'question': '', 
 		'duration': '01:30', 
@@ -52,60 +41,56 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
 		'theme': 'default'
 	};
 
-	//use angular.copy so defaultPoll stays unaffected
-	$scope.poll = angular.copy(defaultPoll); 
+	//defaultPoll stays unaffected, because of 2 way data-binding...
+	$scope.pollPreview = angular.copy(defaultPoll); 
 
-	var delta = 15;
-	$scope.pollStatus = {};
+	//pass $scope, since services are singletons and unaware of current $scope
+	//source is hardcoded above
+	PollService.getLatestPoll($scope, source); 
 
-	var source = new EventSource("//localhost/qtool-api/poller.php");
-	PollService.getLatestPoll($scope, source);
+	//Watch for changes in theme -> inject the correct css-file for preview
+	//also removes previously injected css-files
+	//TODO see if SASS-files could be injected? this way we could use variables instead of css-markup
+	$scope.$watch('pollPreview.themeUrl', function(newValue) {
+        if(typeof newValue !== 'undefined') { //TODO awesome validation
+        	PollService.changeTheme(newValue);	
+        }
+    });
 
-	var auth = function() {
-		console.log('calling auth function');
-		//AuthService.auth(user);
-	}
+    $scope.publishPoll = function() {
+    	// Ghetto validation, please kill me
+    	// TODO write documentation -> mention early returns
+    	if($scope.pollPreview.question.length < 5 || $scope.pollPreview.answers.length < 1) {
+    		return;
+    	}
 
-	
-	var getThemes = function() {
-		var d = $q.defer();
-		var result = Themes.query({}, function() {
-				d.resolve(result);
-			});
-		return d.promise;
-	}
+		PollService.savePoll($scope.pollPreview).then(function(data) {
+			if(data.success) {
 
-	getThemes().then(function(data) {
-		$scope.themes = data;
-	});
+				//reset the poll to default values
+				$scope.pollPreview = angular.copy(defaultPoll); 
 
-	$scope.logout = function() {
-		console.log('clicked logout')
+				// get themes again, since everything's been resetted.
+				// Maybe themes should come from a service?
+				// TODO refactor this into a service
+				getThemes().then(function(data) {
+					$scope.pollPreview.themes = data;
+				});
 
-		// call log out
-		window.location = "#/login";
-	}
+			} else { //debugging, feel free to remove this else clause
+				console.log(data) 
+			}
+		});	
+    }
 
-	$scope.erasePoll = function() {
-		$scope.poll = angular.copy(defaultPoll); 
-	}
-
-	// switch templates from menu clicks
-	$scope.switchTemplate = function(template) {
-		$scope.currentTemplate = template;
-	}
-
+	//... here are the form CRUD controllers
+    //event.preventDefault() is used since some browsers treat buttons as type=submit
+    //, and pressing the enter key works in mysterious ways
+    
 	$scope.addAnswer = function(event) {
 		event.preventDefault();
-		if($scope.poll.answers.length < 6) {
-			$scope.poll.answers.push('');	
-		}
-	}
-
-	$scope.removeAnswer = function(index, event) {
-		event.preventDefault();
-		if($scope.poll.answers.length > 1) {
-			$scope.poll.answers.splice($scope.poll.answers.indexOf($scope.poll.answers[index]), 1);
+		if($scope.pollPreview.answers.length < 6) {
+			$scope.pollPreview.answers.push('');	
 		}
 	}
 
@@ -117,50 +102,49 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
 		} else {
 			newIndex = index - 1;
 		}
-		var oldValue = $scope.poll.answers[index];
-		var newValue = $scope.poll.answers[newIndex];
+		var oldValue = $scope.pollPreview.answers[index];
+		var newValue = $scope.pollPreview.answers[newIndex];
 
-		$scope.poll.answers[index] = newValue;
-		$scope.poll.answers[newIndex] = oldValue;
+		$scope.pollPreview.answers[index] = newValue;
+		$scope.pollPreview.answers[newIndex] = oldValue;
 	}
 
-	$scope.createPoll = function() {
-		$scope.showGenericError = false;
-		console.log('poll to be sent : ' , $scope.poll)
-
-		PollService.savePoll($scope.poll).then(function(data) {
-			if(data.success) {
-				$scope.switchTemplate('createdPoll');
-			} else {
-			 	$scope.showGenericError = true;
-			}
-		});
+	$scope.removeAnswer = function(index, event) {
+		event.preventDefault();
+		if($scope.pollPreview.answers.length > 1) {
+			$scope.pollPreview.answers.splice($scope.pollPreview.answers.indexOf($scope.pollPreview.answers[index]), 1);
+		}
 	}
 
-	$scope.publishPoll = function() {
-
-		console.log('publishing poll with id: ' , $scope.latestPoll.ID)
-		console.log('publishing poll with duration: ' , $scope.latestPoll.duration)
-		PollService.publishPoll($scope.latestPoll.ID, $scope.latestPoll.duration).then(function(data) {
-			console.log('publish successful',data)
-		});
-		$scope.poll = angular.copy(defaultPoll); 
-
-		//if success
-		//$scope.switchTemplate('defaultTemplate');
+	var getThemes = function() {
+		var d = $q.defer();
+		var result = Themes.query({}, function() {
+				d.resolve(result);
+			});
+		return d.promise;
 	}
 
+	// TODO what happens if no themes are found?
+	// refactor / rethink this
+	// ALSO, refactor the way themes are treated and fetched. This is ugly and prone to errors.
+	getThemes().then(function(data) {
+		$scope.pollPreview.themes = data;
+	});
+
+	// TODO refactor this method
+	// The reason the time is treated as a <min:sec> string is because of a lazy backend dev
+	// and lack of planning. This is just plain stupid, but it works. 
 	$scope.changeTime = function(direction, event) {
 		event.preventDefault();
 		var diff = 0;
 
 		if(direction == 'up') {
-			diff = diff + delta; 
+			diff = diff + timeIncrement; 
 		} else if( direction == 'down') {
-			diff = diff - delta;
+			diff = diff - timeIncrement;
 		}
 
-		var timeInSeconds = parseInt($scope.poll.duration.split(':')[1]) + parseInt($scope.poll.duration.split(':')[0]) * 60 + diff;
+		var timeInSeconds = parseInt($scope.pollPreview.duration.split(':')[1]) + parseInt($scope.pollPreview.duration.split(':')[0]) * 60 + diff;
 		var tempMinutes = parseInt(timeInSeconds / 60);
 		var tempSeconds = timeInSeconds % 60;
 
@@ -168,7 +152,7 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
 			tempSeconds = 0;
 		}
 
-		$scope.poll.duration = tempMinutes * 60 + tempSeconds;
+		$scope.pollPreview.duration = tempMinutes * 60 + tempSeconds;
 		
 		// you could stringify the rest, but let's take an easy route.. 
 		if(tempMinutes < 10) {
@@ -181,9 +165,7 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
 			tempSeconds = delta;
 		}
 		
-		$scope.poll.duration = tempMinutes + ':' + tempSeconds;
+		$scope.pollPreview.duration = tempMinutes + ':' + tempSeconds;
 	}
-
-
 
 });
