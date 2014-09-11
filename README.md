@@ -1,8 +1,7 @@
-qtool
-=====
+How to install (insert into terminal/console):
 
-qtool
+1. npm install
 
-TODO:
+2. bower install
 
-cut down the json from/to API
+3. grunt server
