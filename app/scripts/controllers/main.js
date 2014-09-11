@@ -24,26 +24,8 @@ qtoolControllers.controller('LoginCtrl', function ($scope, $rootScope, AuthServi
 	}
 });
 
-qtoolControllers.controller('HistoryCtrl', function ($scope, HistoryService, $timeout) {
-	console.log('hello, says HistoryCtrl!')
-	HistoryService.getHistory().then(function(data) {
-		console.log('history received: ' , data)
-	});
-	
-	var longPoll = function() {
-		$timeout(function() {
-    		HistoryService.getHistory().then(function(data) {
-				console.log('history received: ' , data)
-			});
-			longPoll();
-		}, 10000); 
-	}
-	longPoll();
-});
+qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService, PollService, Themes, $q, HistoryService, $timeout) {
 
-
-qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService, PollService, Themes, $q) {
-	
 	$scope.currentTemplate = 'newPoll'; //holds the current template ID
 	$scope.livePoll; //holds the latest published poll that is LIVE
 	$scope.pollPreview; //holds the editable poll
@@ -74,6 +56,22 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
         	PollService.changeTheme(newValue);	
         }
     });
+
+    HistoryService.getHistory().then(function(data) {
+		$scope.pollHistory = data;
+		console.log('poll history ' , data.response)
+	});
+	
+	var longPoll = function() {
+		$timeout(function() {
+    		HistoryService.getHistory().then(function(data) {
+				$scope.pollHistory = data.response;
+				$scope.testaus = 'kissa';
+			});
+			longPoll();
+		}, 10000); 
+	}
+	longPoll();
 
     $scope.publishPoll = function() {
     	// Ghetto validation, please kill me

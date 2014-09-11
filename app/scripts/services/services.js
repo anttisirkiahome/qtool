@@ -101,10 +101,10 @@ qtoolServices.service('PollService', ['Poll', '$q', 'cssInjector', '$cookieStore
 						}  else {
 							$scope.hasVoted = false;
 						}
-						
+						cssInjector.removeAll(); 
 						cssInjector.add(receivedData.theme);
 					} else {
-						cssInjector.removeAll(); 
+						
 						$scope.publishedPollAvailable = false;
 					}
 					$scope.$apply(); // is this a best practice? ... are there other ways?

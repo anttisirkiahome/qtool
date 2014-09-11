@@ -13,9 +13,22 @@
 				      		</span>
 			      		</li>
 		      		</a>
-					<li class="rounded10"><a ng-click="switchTemplate('previousPolls')">	
-						<i class="fa fa-book fa-2x"></i>  <span class="right">History  </span></a></li>
-					<li class="rounded10"><a ng-click="switchTemplate('editUsers')">		<i class="fa fa-child fa-2x"></i> <span class="right">Users    </span></a></li>
+					<a>
+						<li class="rounded10" ng-click="switchTemplate('previousPolls')">
+							<i class="fa fa-book fa-2x"></i>  
+							<span class="right">
+								History  
+							</span>
+						</li>
+					</a>
+					<a>
+						<li class="rounded10" ng-click="switchTemplate('editUsers')">
+							<i class="fa fa-child fa-2x"></i> 
+							<span class="right">
+								Users    
+							</span>
+						</li>
+					</a>
 				</ul>
 		</div>
 		<div class="contents">
@@ -146,8 +159,8 @@
 </div>
 </script>
 
-<script type="text/ng-template" id="previousPolls" ng-controller="HistoryCtrl">
-moro
+<script type="text/ng-template" id="previousPolls">
+ {{pollHistory}}
 </script>
 <hr />
 for debugging, $scope.livePoll:
