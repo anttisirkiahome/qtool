@@ -14,9 +14,8 @@ how to build:
 
 features missing (mostly implemented already): <br />
 <hr />
-	<ol>
-	<li> themes</li>
-	<li> authentication (interceptor is already implemented)</li>
-	<li> history w/ infinite scrolling</li>
-	<li> user controls</li>
-</ol>
+	themes
+	authentication (interceptor is already implemented)
+	history w/ infinite scrolling
+	user controls
+
