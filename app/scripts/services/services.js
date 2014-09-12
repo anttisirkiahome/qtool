@@ -96,7 +96,7 @@ qtoolServices.service('PollService', ['Poll', '$q', 'cssInjector', '$cookieStore
 						}
 
 						// Handle if the user has already voted
-						if($cookieStore.get('votes').indexOf(receivedData.ID) !== -1) {
+						if($cookieStore.get('votes') && $cookieStore.get('votes').indexOf(receivedData.ID) !== -1) {
 							$scope.hasVoted = true; //person has already voted for this poll ID
 						}  else {
 							$scope.hasVoted = false;
