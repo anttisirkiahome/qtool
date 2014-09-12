@@ -6,11 +6,17 @@ How to install (insert into terminal/console):
 
 3. grunt server
 
-THIS IS MPV
+how to build:
 
-features missing:
+1. grunt build
 
-1) themes
-2) authentication (interceptor is already implemented)
-3) history w/ infinite scrolling
-4) user controls
+<h1> THIS IS MPV </h1>
+
+features missing (mostly implemented already): <br />
+<hr />
+	<ol>
+	<li> themes</li>
+	<li> authentication (interceptor is already implemented)</li>
+	<li> history w/ infinite scrolling</li>
+	<li> user controls</li>
+</ol>
