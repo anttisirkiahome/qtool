@@ -5,17 +5,19 @@
 		{{livePoll.question}}
 		</h3>
 		<div class="pollAnswerContainer" ng-show="!hasVoted">
-			<ul>
+			<ul class="hasNotVoted">
 				<li ng-repeat="pollAnswerOption in livePoll.answers">
 					<button ng-click="vote(pollAnswerOption.id)" class="button btn">{{pollAnswerOption.answer}}</button> 
 				</li>
 			</ul>
 		</div>
 		<div class="pollAnswerContainer" ng-show="hasVoted">
-			<ul>
+			<ul class="hasVoted">
 				<li ng-repeat="answer in livePoll.answers">
 					<span class="answer">{{answer.answer}}</span>
-					<div class="voteBar" style="width:{{answer.barWidth}}%">{{answer.barWidth | number:0}}% </div>
+					<div class="voteBarContainer">
+						<div class="voteBar" style="width:{{answer.barWidth}}%">{{answer.barWidth | number:0}}% </div>
+					</div>
 					
 				</li>
 			</ul>

@@ -10,7 +10,7 @@ how to build:
 
 1. grunt build
 
-<h1> THIS IS MPV </h1>
+<h1> THIS IS MVP </h1>
 
 features missing (mostly implemented already): <br />
 <hr />
