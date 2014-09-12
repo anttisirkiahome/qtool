@@ -5,14 +5,14 @@ var qtoolServices = angular.module('qtoolServices', ['ngResource']);
 // NOTE using factories / services hand in hand like this might not be best practice
 
 qtoolServices.factory('Auth', function($resource) {
-	return $resource('../../qtool-api/api/auth/', {}, {
+	return $resource('//localhost/qtool-api/api/auth/', {}, {
 		query: {isArray: false}
 	});
 });
 
 qtoolServices.factory('Themes', function($resource) {
 	console.log('this is themes factory')
-	return $resource('../../qtool-api/api/poll/themes/', {}, {
+	return $resource('//localhost/qtool-api/api/poll/themes/', {}, {
 		query: {isArray: true}
 	});
 });
@@ -30,7 +30,7 @@ qtoolServices.service('AuthService', ['Auth', '$q', function(Auth, $q) {
 }]);
 
 qtoolServices.factory('History', function($resource) {
-	return $resource('../../qtool-api/api/poll/history/', {}, {
+	return $resource('//localhost/qtool-api/api/poll/history/', {}, {
 		query: {isArray: false}
 	});
 });
@@ -47,8 +47,8 @@ qtoolServices.service('HistoryService', ['History', '$q', function(History, $q) 
 	}
 }]);
 
-qtoolServices.factory('Poll', ['$resource', function($resource) {
-	return $resource('../../qtool-api/api/poll', {q: '@poll'}, {
+qtoolServices.factory('Poll', ['$resource', '$rootScope', function($resource, $rootScope) {
+	return $resource($rootScope.serverRoot + '/qtool-api/api/poll', {q: '@poll'}, {
 		query: {isArray: false}, 
 		update: {method:'PUT', params: {updateId: '@id', type:'@vote'}}
 	});

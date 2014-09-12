@@ -54,3 +54,11 @@ qtoolApp.config(function ($routeProvider) {
         redirectTo: '/login'
       });
 });
+
+qtoolApp.run(['$rootScope',
+    function($rootScope) {
+        //$rootScope.serverRoot = '//localhost';
+        $rootScope.serverRoot = 'http://185.20.139.103';
+        
+    }
+]);
