@@ -307,16 +307,9 @@ module.exports = function (grunt) {
             '*.html',
             'views/{,*/}*.html',
             'images/{,*/}*.{webp}',
-            'fonts/*',
-            'bower_components/fontawesome/fonts/*.*'
+            'fonts/*'
           ]
         }, {
-                expand: true,
-                dot: true,
-                cwd: 'app/bower_components/fontawesome/fonts/',
-                src: ['*.*'],
-                dest: '<%= yeoman.dist %>/fonts'
-            }, {
           expand: true,
           cwd: '.tmp/images',
           dest: '<%= yeoman.dist %>/images',
