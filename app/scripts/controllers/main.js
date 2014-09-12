@@ -44,6 +44,9 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
 	//defaultPoll stays unaffected, because of 2 way data-binding...
 	$scope.pollPreview = angular.copy(defaultPoll); 
 
+		// TODO when implementin themes, remove this
+	$scope.pollPreview.themeUrl = "http://localhost/qtool-api/css/default.css";
+
 	//pass $scope, since services are singletons and unaware of current $scope
 	//source is hardcoded above
 	PollService.getLatestPoll($scope, source); 
