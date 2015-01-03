@@ -26,7 +26,7 @@ qtoolApp.factory('errorInterceptor', ['$q', '$rootScope', '$location', 'toaster'
                 }
                 if (response && response.status === 401) {
                     console.log('got unauthorized , redirecting')
-                    toaster.pop('error', "Error", "Incorrect login credentials");
+                    toaster.pop('error', "Error", "Incorrect login credentials", 1500);
                     window.location = '#/login';
                 }
                 return $q.reject(response);
