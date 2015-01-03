@@ -18,7 +18,7 @@ qtoolControllers.controller('MainCtrl', function ($scope, PollService, $cookieSt
 
 });
 
-qtoolControllers.controller('LoginCtrl', function ($scope, $rootScope, AuthService) {
+qtoolControllers.controller('LoginCtrl', ['$scope', '$rootScope', 'AuthService', 'toaster' ,function ($scope, $rootScope, AuthService, toaster) {
 	console.log('login ctrl')
 	$scope.login = function(user) {
 	    AuthService.auth(user).then(function(data) {
@@ -27,8 +27,7 @@ qtoolControllers.controller('LoginCtrl', function ($scope, $rootScope, AuthServi
 			}
 		});
 	}
-
-});
+}]);
 
 qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService, PollService, Themes, $q, HistoryService, $timeout, UserService) {
 console.log('admin controller')

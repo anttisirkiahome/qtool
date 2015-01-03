@@ -363,7 +363,7 @@ $defaultMargin: 16px;
         float: right;
         padding: $defaultPadding;
     }
-    
+
     #pollPreview {
         width: 48%;
         height: auto;
@@ -434,4 +434,10 @@ h3 {
 #editUsers {
     min-height: 600px;
 
+}
+
+#toast-container {
+    position: absolute;
+    left: calc(50% - (363px / 2));
+    top: 10px;
 }

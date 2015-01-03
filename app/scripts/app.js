@@ -7,7 +7,9 @@ var qtoolApp = angular.module('qtoolApp', [
     'ngRoute',
     'qtoolControllers',
     'qtoolServices',
-    'angular.css.injector'
+    'angular.css.injector',
+    'ngAnimate',
+    'toaster'
   ]);
 
 qtoolApp.config(['$httpProvider', function($httpProvider) {
