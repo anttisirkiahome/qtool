@@ -425,6 +425,14 @@ h3 {
 .livePoll {
     margin-bottom: $defaultPadding;
     border: 4px solid red;
+
+    li {
+        margin-top: 6px;
+
+        &:first-child {
+            margin-top: 12px;
+        }
+    }
 }
 
 .voteBarContainer {

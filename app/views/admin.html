@@ -1,6 +1,6 @@
 <div id="adminContainer">
 	<div id="header">
-		<div class="right">
+		<div class="right" title="Logout">
 			<i class="fa fa-power-off fa-4x" ng-click="logout()"></i>
 		</div>
 	</div>
@@ -8,7 +8,7 @@
 		<div class="menuContainer">
 				<ul>
 					<a>
-						<li class="rounded10" ng-click="switchTemplate('newPoll')">
+						<li class="rounded10" ng-click="switchTemplate('newPoll')" title="Create a new poll">
 					      	<i class="fa fa-plus fa-2x"></i>
 					      	<span class="right">
 					      		New poll
@@ -24,7 +24,7 @@
 						</li>
 					</a> -->
 					<a>
-						<li class="rounded10" ng-click="switchTemplate('editUsers')">
+						<li class="rounded10" ng-click="switchTemplate('editUsers')" title="Edit user information">
 							<i class="fa fa-child fa-2x"></i>
 							<span class="right">
 								Users
@@ -73,7 +73,7 @@
 							class="btn answerControlButton left button btn-danger"
 							ng-click="removeAnswer($index, $event)"
 							ng-hide="pollPreview.answers.length <= 2">
-								<i class="fa fa-times fa-2x" title="Remove"></i>
+								<i class="fa fa-times fa-2x" title="Remove answer"></i>
 					</button>
 				</li>
 			</ul>
@@ -90,9 +90,9 @@
 			<hr />
 			<label>Duration (min:sec)</label>
 			<br />
-			<button class="btn left btn-default button timeValue" ng-click="changeTime('down', $event)">-</button>
+			<button class="btn left btn-default button timeValue" ng-click="changeTime('down', $event)" title="Decrease duration">-</button>
 			<input type="text" required ng-model="pollPreview.duration" value="{{pollPreview.duration}}" class="form-control timepicker left" readonly />
-			<button class="btn left btn-default button timeValue" ng-click="changeTime('up', $event)">+</button>
+			<button class="btn left btn-default button timeValue" ng-click="changeTime('up', $event)" title="Increase duration">+</button>
 			<div class="clearfix"></div> <!-- clearfix is just lazy, so FIXME -->
 			<hr />
 			<!--
@@ -218,6 +218,7 @@
 					ng-class="{'editMode': removeUserConfirmation}">
 
 						<i  class="glyphicon glyphicon-remove remove"
+							title="Remove user"
 							ng-click="removeUserConfirmation = !removeUserConfirmation">
 						</i>
 						<i class="glyphicon glyphicon-user userIcon"></i>
@@ -227,9 +228,11 @@
 						<div ng-show="removeUserConfirmation">
 							Really remove user {{user.username}}?
 							<i  class="glyphicon glyphicon-remove remove"
+								title="Cancel remove"
 								ng-click="removeUserConfirmation = !removeUserConfirmation">
 							</i>
 							<i  class="glyphicon glyphicon-ok confirm"
+								title="Remove user"
 								ng-click="removeUser(user.username)">
 							</i>
 						</div>

@@ -98,6 +98,8 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
 		PollService.savePoll($scope.pollPreview).then(function(data) {
 			if(data.success) {
 
+				toaster.pop('success', "", "Poll has been published", 1500);
+
 				//reset the poll to default values
 				$scope.pollPreview = angular.copy(defaultPoll);
 
@@ -109,6 +111,7 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
 				});
 
 			} else { //debugging, feel free to remove this else clause
+				toaster.pop('error', "Error", "Error publishing poll", 1500);
 				//console.log(data)
 			}
 		});
@@ -132,10 +135,10 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
 		UserService.createUser(user).then(function(response) {
 			if(response.success) {
 				// user created
-				toaster.pop('success', "", "User created");
+				toaster.pop('success', "", "User created", 1500);
 				getAllUsers();
 			} else {
-				toaster.pop('error', "Error", "Could not create user");
+				toaster.pop('error', "Error", "Could not create user", 1500);
 			}
 			angular.copy({}, user);
 		});
@@ -145,9 +148,9 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
     	UserService.removeUser(username).then(function(response) {
     		if(response.success) {
     			getAllUsers();
-    			toaster.pop('success', "", "User removed");
+    			toaster.pop('success', "", "User removed", 1500);
     		} else {
-    			toaster.pop('error', "Error", "Could not remove user");
+    			toaster.pop('error', "Error", "Could not remove user", 1500);
     		}
 
     	});
@@ -155,7 +158,6 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
 
 	//... here are the form CRUD controllers
     //event.preventDefault() is used since some browsers treat buttons as type=submit
-    //, and pressing the enter key works in mysterious ways
 
 	$scope.addAnswer = function(event) {
 		event.preventDefault();
@@ -186,6 +188,7 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
 		}
 	}
 
+	// TODO why the f is this here?
 	var getThemes = function() {
 		var d = $q.defer();
 		var result = Themes.query({}, function() {
@@ -197,6 +200,7 @@ qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService,
 	// TODO what happens if no themes are found?
 	// refactor / rethink this
 	// ALSO, refactor the way themes are treated and fetched. This is ugly and prone to errors.
+	// ALSO isolate this to a separate callable function
 	getThemes().then(function(data) {
 		$scope.pollPreview.themes = data;
 	});
