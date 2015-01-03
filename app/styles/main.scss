@@ -481,6 +481,11 @@ h3 {
             li {
                 margin-bottom: 12px;
 
+                &.editMode {
+                    background: #CCC;
+                    padding: 6px;
+                }
+
                 &:last-child {
                     margin-bottom: 0;
                 }
