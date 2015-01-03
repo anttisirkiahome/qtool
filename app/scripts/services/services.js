@@ -4,6 +4,35 @@ var qtoolServices = angular.module('qtoolServices', ['ngResource']);
 
 // NOTE using factories / services hand in hand like this might not be best practice
 
+// this service handles http requests, example included for further development
+// now used for redirecting 401 responses
+qtoolApp.factory('errorInterceptor', ['$q', '$rootScope', '$location',
+    function ($q, $rootScope, $location) {
+        console.log('inside errorInterceptor')
+        return {
+            request: function (config) {
+                return config || $q.when(config);
+            },
+            requestError: function(request){
+                return $q.reject(request);
+            },
+            response: function (response) {
+                return response || $q.when(response);
+            },
+            responseError: function (response) {
+                if (response && response.status === 404) {
+                }
+                if (response && response.status >= 500) {
+                }
+                if (response && response.status === 401) {
+                    console.log('got unauthorized , redirecting')
+                    window.location = '#/login';
+                }
+                return $q.reject(response);
+            }
+        };
+}]);
+
 qtoolServices.factory('Auth', function($resource) {
 	return $resource('//localhost/qtool-api/api/auth/', {}, {
 		query: {isArray: false}

@@ -10,53 +10,9 @@ var qtoolApp = angular.module('qtoolApp', [
     'angular.css.injector'
   ]);
 
-qtoolApp.factory('errorInterceptor', ['$q', '$rootScope', '$location',
-    function ($q, $rootScope, $location) {
-        console.log('inside errorInterceptor')
-        return {
-            request: function (config) {
-                return config || $q.when(config);
-            },
-            requestError: function(request){
-                return $q.reject(request);
-            },
-            response: function (response) {
-                return response || $q.when(response);
-            },
-            responseError: function (response) {
-                if (response && response.status === 404) {
-                }
-                if (response && response.status >= 500) {
-                }
-                if (response && response.status === 401) {
-                    console.log('got unauthorized , redirecting')
-                    window.location = '#/login';
-                }
-                return $q.reject(response);
-            }
-        };
-}]);
-
 qtoolApp.config(['$httpProvider', function($httpProvider) {
   $httpProvider.interceptors.push('errorInterceptor');
- /* $httpProvider.interceptors.push(['$q', function($q) {
-    console.log('interceptor')
-    return function(promise) {
-      console.log('interceptor promise ' , promise)
-      return promise.then(function(response) {
-        //response.data.extra = 'Interceptor strikes back';
-        return response;
 
-      }, function(response) {
-        console.log('response status ' , response)
-        if (response.status === 401) {
-          window.location = '#/login';
-          return response;
-        }
-        return $q.reject(response);
-      });
-    }
-  }]); */
   if (!$httpProvider.defaults.headers.get) {
     $httpProvider.defaults.headers.get = {};
   }
