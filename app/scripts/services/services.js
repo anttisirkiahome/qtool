@@ -41,8 +41,14 @@ qtoolServices.factory('Auth', function($resource) {
 });
 
 qtoolServices.factory('User', function($resource) {
-	return $resource('//localhost/qtool-api/api/user/', {}, {
-		query: {isArray: false}
+	return $resource('//localhost/qtool-api/api/user/:username',
+	 {username:'@username'}, {
+		query: {
+			isArray: false
+		},
+		deleteUser: {
+			method: 'DELETE'
+		}
 	});
 });
 
@@ -58,6 +64,20 @@ qtoolServices.service('UserService', ['User', '$q', function(User, $q) {
 		getUsers: function() {
 			var d = $q.defer();
 			var result = User.query({}, function() {
+				d.resolve(result);
+			});
+			return d.promise;
+		},
+		createUser: function(user) {
+			var d = $q.defer();
+			var result = User.save({}, user, function() {
+				d.resolve(result);
+			});
+			return d.promise;
+		},
+		removeUser: function(username) {
+			var d = $q.defer();
+			var result = User.deleteUser({}, {username:username}, function() {
 				d.resolve(result);
 			});
 			return d.promise;

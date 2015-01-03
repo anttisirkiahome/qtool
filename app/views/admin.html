@@ -166,18 +166,33 @@
  {{pollHistory}}
 </script>
 
+<!-- edit users template -->
 <script type="text/ng-template" id="editUsers">
+<button class="btn btn-success button" ng-click="showNewUserForm = !showNewUserForm"><i class="glyphicon glyphicon-plus"></i> New user</button>
+<hr />
 <div class="newUserForm">
-	<button class="btn btn-success button" ng-click="showNewUserForm = !showNewUserForm"><i class="glyphicon glyphicon-plus"></i> New user</button>
 	<div ng-show="showNewUserForm">
-		<div class="form-group">
-			<input type="text" class="form-control" placeholder="Username" required />
-			<input type="password" class="form-control" placeholder="Password" required />
-			<button class="btn button">Create</button>
-		</div>
+		<form ng-submit="createUser(newUser)">
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="Username" ng-model="newUser.username" required />
+				<input type="password" class="form-control" placeholder="Password" ng-model="newUser.password" required />
+				<button class="btn button btn-success">Create</button>
+			</div>
+		</form>
+		<div class="arrow-up" ng-click="showNewUserForm = !showNewUserForm"></div>
+		<hr />
 	</div>
-	<hr />
 </div>
-
-
+<div class="existingUsers">
+<h3> {{existingUsers.length}} Existing users</h3>
+<div class="usersContainer">
+	<ul>
+		<li ng-repeat="user in existingUsers"><i class="glyphicon glyphicon-remove remove" ng-click="removeUserConfirmation = !removeUserConfirmation"></i> <i class="glyphicon glyphicon-user userIcon"></i> {{user.username}}
+			<div ng-show="removeUserConfirmation">
+				Really remove user {{user.username}}? <i class="glyphicon glyphicon-remove remove" ng-click="removeUserConfirmation = !removeUserConfirmation"></i> <i class="glyphicon glyphicon-ok confirm" ng-click="removeUser(user.username)"></i>
+			</div>
+		</li>
+	</ul>
+</div>
+</div>
 </script>

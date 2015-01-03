@@ -29,7 +29,7 @@ qtoolControllers.controller('LoginCtrl', ['$scope', '$rootScope', 'AuthService',
 	}
 }]);
 
-qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService, PollService, Themes, $q, HistoryService, $timeout, UserService) {
+qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService, PollService, Themes, $q, HistoryService, $timeout, UserService, toaster) {
 console.log('admin controller')
 	$scope.currentTemplate = 'newPoll'; //holds the current template ID
 	$scope.livePoll; //holds the latest published poll that is LIVE
@@ -121,9 +121,37 @@ console.log('admin controller')
     	$scope.currentTemplate = template;
     }
 
-    UserService.getUsers().then(function(data) {
-    	console.log('user service data ' , data.users)
-    });
+    var getAllUsers = function() {
+	    UserService.getUsers().then(function(data) {
+    		console.log('user service data ' , data.users)
+    		$scope.existingUsers = data.users;
+    	});
+    }
+
+    getAllUsers();
+
+    $scope.createUser = function(user) {
+		console.log('trying to create user ' , user)
+		UserService.createUser(user).then(function(response) {
+			console.log('user service response ' ,response)
+			if(response.success) {
+				// user created
+				toaster.pop('success', "", "User created");
+				getAllUsers();
+			} else {
+				toaster.pop('error', "Error", "Could not create user");
+			}
+			angular.copy({}, user);
+		});
+	}
+
+    $scope.removeUser = function(username) {
+    	console.log('trying to remove user ' , username)
+    	UserService.removeUser(username).then(function(response) {
+    		console.log('user service remove response ' , response)
+    		getAllUsers();
+    	});
+    }
 
 	//... here are the form CRUD controllers
     //event.preventDefault() is used since some browsers treat buttons as type=submit
