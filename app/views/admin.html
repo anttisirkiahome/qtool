@@ -46,7 +46,7 @@
 	<div id="newPollForm" class="rounded10">
 		<h3>Create</h3>
 		<form class="question" ng-submit="previewPoll()" name="pollForm" ng-model="pollPreview">
-			<input type="text" name="newQuestion" class="form-control" placeholder="Question" ng-model="pollPreview.question" pattern=".{5,}" title="The question needs to be at least 5 characters long" required/>
+			<input type="text" name="newQuestion" class="form-control" placeholder="Question" ng-model="pollPreview.question" title="The question needs to be at least 5 characters long" required/>
 			<hr />
 			<ul>
 				<li ng-repeat="answer in pollPreview.answers track by $index">
@@ -137,12 +137,13 @@
 	</div>
 
 	<!-- Poll PREVIEW -->
-	<div class="rounded10 poll">
+	<div class="rounded10 poll pollPreview">
 		<h3 class="left">Preview</h3>
 		<span class="right">
 			<b>Poll duration:</b> {{pollPreview.duration}}
 		</span>
 		<div class="pollContainer">
+			<hr />
 			<div class="pollInfo">
 				<h4 class="pollAnswer left">
 					{{pollPreview.question}}
@@ -157,7 +158,6 @@
 				</ul>
 					</div>
 		</div>
-		<hr />
 	</div>
 </div>
 </script>

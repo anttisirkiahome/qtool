@@ -351,7 +351,7 @@ $defaultMargin: 16px;
                 padding: 0;
                 height: 42px;
                 width: 42px;
-                margin-left: 4px;
+                margin-left: 2px;
             }
         }
     }
@@ -403,6 +403,7 @@ h3 {
             }
         }
 
+        /*
         .pollAnswerContainer {
             width: 100%;
 
@@ -416,6 +417,7 @@ h3 {
                 }
             }
         }
+        */
 
     }
 }
@@ -483,7 +485,7 @@ h3 {
 
                 &.editMode {
                     background: #CCC;
-                    padding: 6px;
+                    padding: 6p;
                 }
 
                 &:last-child {
@@ -503,6 +505,32 @@ h3 {
                 .confirm {
                     color: green;
                     cursor: pointer;
+                }
+            }
+        }
+    }
+}
+
+.pollPreview {
+
+    .pollContainer {
+        clear: both;
+
+        hr {
+            margin-bottom: 8px;
+        }
+    }
+
+    .pollAnswerContainer  {
+        ul {
+            margin: 0;
+            padding: 0;
+
+            li {
+                margin-bottom: 12px;
+
+                &:last-child {
+                    margin-bottom: 0px;
                 }
             }
         }
