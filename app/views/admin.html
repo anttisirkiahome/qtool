@@ -1,31 +1,33 @@
 <div id="adminContainer">
 	<div id="header">
-			<div class="right"><i class="fa fa-power-off fa-4x"></i></div>
+		<div class="right">
+			<i class="fa fa-power-off fa-4x" ng-click="logout()"></i>
+		</div>
 	</div>
 	<div class="contentContainer">
 		<div class="menuContainer">
 				<ul>
 					<a>
 						<li class="rounded10" ng-click="switchTemplate('newPoll')">
-					      	<i class="fa fa-plus fa-2x"></i>  
+					      	<i class="fa fa-plus fa-2x"></i>
 					      	<span class="right">
-					      		New poll 
+					      		New poll
 				      		</span>
 			      		</li>
 		      		</a>
-					<a>
+					<!-- <a>
 						<li class="rounded10" ng-click="switchTemplate('previousPolls')">
-							<i class="fa fa-book fa-2x"></i>  
+							<i class="fa fa-book fa-2x"></i>
 							<span class="right">
-								History  
+								History
 							</span>
 						</li>
-					</a>
+					</a> -->
 					<a>
 						<li class="rounded10" ng-click="switchTemplate('editUsers')">
-							<i class="fa fa-child fa-2x"></i> 
+							<i class="fa fa-child fa-2x"></i>
 							<span class="right">
-								Users    
+								Users
 							</span>
 						</li>
 					</a>
@@ -34,11 +36,11 @@
 		<div class="contents">
 			<div ng-include="currentTemplate"></div>
 		</div>
-	</div>	
+	</div>
 </div>
 
 
-<!-- templates --> 
+<!-- templates -->
 <script type="text/ng-template" id="newPoll">
 <div id="newPollContainer">
 	<div id="newPollForm" class="rounded10">
@@ -48,49 +50,49 @@
 			<hr />
 			<ul>
 				<li ng-repeat="answer in pollPreview.answers track by $index">
-					<input 	type="text" 
-							ng-model="pollPreview.answers[$index]" 
-							class="answer form-control left" 
-							placeholder="Answer {{$index + 1}}" 
+					<input 	type="text"
+							ng-model="pollPreview.answers[$index]"
+							class="answer form-control left"
+							placeholder="Answer {{$index + 1}}"
 							required
 							pattern=".{2,}" title="The answer needs to be at least 2 characters long"/>
-							
-					<button 
-							ng-click="togglePosition('up', $index, $event)" 
-							class="answerUp answerControlButton left btn btn-default" 
+
+					<button
+							ng-click="togglePosition('up', $index, $event)"
+							class="answerUp answerControlButton left btn btn-default"
 							ng-class="{visibilityNone: $index == 0}">
 								<i class="fa fa-arrow-up fa-2x" title="Move answer up"></i>
 					</button>
-					<button 
-							ng-click="togglePosition('down', $index, $event)" 
-							class="btn answerControlButton buttonanswerDown left btn-default button" 
+					<button
+							ng-click="togglePosition('down', $index, $event)"
+							class="btn answerControlButton buttonanswerDown left btn-default button"
 							ng-class="{visibilityNone: $index == (pollPreview.answers.length - 1) || pollPreview.answers.length == 1}">
 								<i class="fa fa-arrow-down fa-2x" title="Move answer down"></i>
 					</button>
-					<button 
-							class="btn answerControlButton left button btn-danger" 
-							ng-click="removeAnswer($index, $event)" 
+					<button
+							class="btn answerControlButton left button btn-danger"
+							ng-click="removeAnswer($index, $event)"
 							ng-hide="pollPreview.answers.length <= 2">
 								<i class="fa fa-times fa-2x" title="Remove"></i>
 					</button>
 				</li>
 			</ul>
 			<div class="controls">
-			<button 
-				class="btn button left btn-info" 
-				ng-click="addAnswer($event)" 
+			<button
+				class="btn button left btn-info"
+				ng-click="addAnswer($event)"
 				ng-hide="pollPreview.answers.length > 5">
-					<i class="fa fa-plus fa-2x"></i> 
+					<i class="fa fa-plus fa-2x"></i>
 					<span class="alignMiddle">Add answer</span>
 				</button>
 			</div>
 				<div class="clearfix"></div>
 			<hr />
-			<label>Duration (min:sec)</label> 
+			<label>Duration (min:sec)</label>
 			<br />
 			<button class="btn left btn-default button timeValue" ng-click="changeTime('down', $event)">-</button>
 			<input type="text" required ng-model="pollPreview.duration" value="{{pollPreview.duration}}" class="form-control timepicker left" readonly />
-			<button class="btn left btn-default button timeValue" ng-click="changeTime('up', $event)">+</button>			
+			<button class="btn left btn-default button timeValue" ng-click="changeTime('up', $event)">+</button>
 			<div class="clearfix"></div> <!-- clearfix is just lazy, so FIXME -->
 			<hr />
 			<!--
@@ -104,7 +106,7 @@
 			<hr /> -->
 			<div class="controls">
 				<button type="submit" class="btn button right btn-success" ng-click="publishPoll()"><i class="fa fa-2x fa-check"></i>Publish Poll!</button>
-			</div> 
+			</div>
 		</form>
 	</div>
 
@@ -119,14 +121,14 @@
 				<h4 class="pollAnswer left">
 					{{livePoll.question}}
 				</h4>
-				
+
 			</div>
 			<div class="pollAnswerContainer">
 				<ul>
 					<li ng-repeat="answer in livePoll.answers">
 						<span class="answer">{{answer.answer}}</span> ({{answer.votes}} votes)
 						<div class="voteBar" style="width:{{answer.barWidth}}%">{{answer.barWidth | number:0}}% </div>
-						
+
 					</li>
 				</ul>
 			</div>
@@ -145,12 +147,12 @@
 				<h4 class="pollAnswer left">
 					{{pollPreview.question}}
 				</h4>
-				
+
 			</div>
 			<div class="pollAnswerContainer">
 				<ul>
-					<li ng-repeat="pollAnswerOption in pollPreview.answers  track by $index" ng-show="pollAnswerOption.length > 1">
-						<button class="button btn">{{pollPreview.answers[$index]}}</button> 
+					<li ng-repeat="pollAnswerOption in pollPreview.answers track by $index" ng-show="pollAnswerOption.length > 1">
+						<button class="button btn">{{pollPreview.answers[$index]}}</button>
 					</li>
 				</ul>
 					</div>
@@ -163,14 +165,19 @@
 <script type="text/ng-template" id="previousPolls">
  {{pollHistory}}
 </script>
-<hr />
-for debugging, $scope.livePoll:
-<pre>
-{{livePoll}}
-</pre>
 
-<hr />
-for debugging, $scope.pollPreview:
-<pre>
-{{pollPreview}}
-</pre>
+<script type="text/ng-template" id="editUsers">
+<div class="newUserForm">
+	<button class="btn btn-success button" ng-click="showNewUserForm = !showNewUserForm"><i class="glyphicon glyphicon-plus"></i> New user</button>
+	<div ng-show="showNewUserForm">
+		<div class="form-group">
+			<input type="text" class="form-control" placeholder="Username" required />
+			<input type="password" class="form-control" placeholder="Password" required />
+			<button class="btn button">Create</button>
+		</div>
+	</div>
+	<hr />
+</div>
+
+
+</script>

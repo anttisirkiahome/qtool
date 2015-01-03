@@ -1,30 +1,29 @@
 <div id="client">
 	<div class="pollContainer">
-	<div ng-show="livePoll.published && !livePoll.expired">
-		<h3 class="pollQuestion">
-		{{livePoll.question}}
-		</h3>
-		<div class="pollAnswerContainer" ng-show="!hasVoted">
-			<ul class="hasNotVoted">
-				<li ng-repeat="pollAnswerOption in livePoll.answers">
-					<button ng-click="vote(pollAnswerOption.id)" class="button btn">{{pollAnswerOption.answer}}</button> 
-				</li>
-			</ul>
+		<div ng-show="publishedPollAvailable">
+			<h3 class="pollQuestion">
+				{{livePoll.question}}
+			</h3>
+			<div class="pollAnswerContainer" ng-show="!hasVoted">
+				<ul class="hasNotVoted">
+					<li ng-repeat="pollAnswerOption in livePoll.answers">
+						<button ng-click="vote(pollAnswerOption.id)" class="button btn">{{pollAnswerOption.answer}}</button> 
+					</li>
+				</ul>
+			</div>
+			<div class="pollAnswerContainer" ng-show="hasVoted">
+				<ul class="hasVoted">
+					<li ng-repeat="answer in livePoll.answers">
+						<span class="answer">{{answer.answer}}</span>
+						<div class="voteBarContainer">
+							<div class="voteBar" style="width:{{answer.barWidth}}%">{{answer.barWidth | number:0}}% </div>
+						</div>
+					</li>
+				</ul>
+			</div>
 		</div>
-		<div class="pollAnswerContainer" ng-show="hasVoted">
-			<ul class="hasVoted">
-				<li ng-repeat="answer in livePoll.answers">
-					<span class="answer">{{answer.answer}}</span>
-					<div class="voteBarContainer">
-						<div class="voteBar" style="width:{{answer.barWidth}}%">{{answer.barWidth | number:0}}% </div>
-					</div>
-					
-				</li>
-			</ul>
+		<div ng-show="!publishedPollAvailable">
+			<h3>No polls available at this time.</h3>
 		</div>
 	</div>
-	<div ng-show="!livePoll.published || livePoll.expired">
-		<h3>No polls available at this time.</h3>
-	</div> 
-</div>
 </div>

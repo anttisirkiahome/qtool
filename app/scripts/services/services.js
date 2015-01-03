@@ -10,6 +10,12 @@ qtoolServices.factory('Auth', function($resource) {
 	});
 });
 
+qtoolServices.factory('User', function($resource) {
+	return $resource('//localhost/qtool-api/api/user/', {}, {
+		query: {isArray: false}
+	});
+});
+
 qtoolServices.factory('Themes', function($resource) {
 	console.log('this is themes factory')
 	return $resource('//localhost/qtool-api/api/poll/themes/', {}, {
@@ -17,14 +23,30 @@ qtoolServices.factory('Themes', function($resource) {
 	});
 });
 
+qtoolServices.service('UserService', ['User', '$q', function(User, $q) {
+	return {
+		getUsers: function() {
+			var d = $q.defer();
+			var result = User.query({}, function() {
+				d.resolve(result);
+			});
+			return d.promise;
+		}
+	}
+}]);
+
 qtoolServices.service('AuthService', ['Auth', '$q', function(Auth, $q) {
 	return {
 		auth: function(user) {
-			console.log('authing', user);
-			Auth.save(user);
-				// .. if logged id broadcast true
-				// else broadcast false	
-				// TODO any other ways than using $rootscope to broadcast?
+			var d = $q.defer();
+			var result = Auth.save(user, function() {
+				d.resolve(result);
+			});
+			return d.promise;
+		},
+		logout: function() {
+			console.log('logging out')
+			Auth.query({});
 		}
 	}
 }]);
@@ -49,7 +71,7 @@ qtoolServices.service('HistoryService', ['History', '$q', function(History, $q) 
 
 qtoolServices.factory('Poll', ['$resource', '$rootScope', function($resource, $rootScope) {
 	return $resource($rootScope.serverRoot + '/qtool-api/api/poll', {q: '@poll'}, {
-		query: {isArray: false}, 
+		query: {isArray: false},
 		update: {method:'PUT', params: {updateId: '@id', type:'@vote'}}
 	});
 }]);
@@ -57,7 +79,7 @@ qtoolServices.factory('Poll', ['$resource', '$rootScope', function($resource, $r
 qtoolServices.service('PollService', ['Poll', '$q', 'cssInjector', '$cookieStore',  function(Poll, $q, cssInjector, $cookieStore) {
 	return {
 		changeTheme: function(themeUrl) {
-			cssInjector.removeAll(); 
+			cssInjector.removeAll();
 			cssInjector.add(themeUrl);
 		},
 		savePoll: function(poll) {
@@ -84,12 +106,13 @@ qtoolServices.service('PollService', ['Poll', '$q', 'cssInjector', '$cookieStore
 					var receivedData = angular.fromJson(event.data).newPoll;
 
 					if(receivedData.success && !receivedData.expired) {
+						console.log('new')
 						$scope.publishedPollAvailable = true; //this boolean is for the views ng-show
 						$scope.livePoll = receivedData;
 
 						for (var i = 0; i < $scope.livePoll.answers.length; i++) {
 							if($scope.livePoll.totalVotes > 0 && $scope.livePoll.answers[i].votes > 0) {
-								$scope.livePoll.answers[i]['barWidth'] = ($scope.livePoll.answers[i].votes / $scope.livePoll.totalVotes) * 100;	
+								$scope.livePoll.answers[i]['barWidth'] = ($scope.livePoll.answers[i].votes / $scope.livePoll.totalVotes) * 100;
 							} else {
 								$scope.livePoll.answers[i]['barWidth'] = 0;
 							}
@@ -101,10 +124,10 @@ qtoolServices.service('PollService', ['Poll', '$q', 'cssInjector', '$cookieStore
 						}  else {
 							$scope.hasVoted = false;
 						}
-						
+
 						cssInjector.add(receivedData.theme);
 					} else {
-						
+						console.log('whut')
 						$scope.publishedPollAvailable = false;
 					}
 					$scope.$apply(); // is this a best practice? ... are there other ways?

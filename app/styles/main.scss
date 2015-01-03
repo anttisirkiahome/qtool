@@ -111,9 +111,14 @@ body {
 }
 
 .login-container {
-    margin-top: 10%;
+    margin: 20% auto;
     overflow: auto;
     padding: 10px 20px;
+    max-width: 300px;
+
+    input {
+        margin-bottom: 12px;
+    }
 }
 
 .rounded10 {
@@ -276,6 +281,10 @@ $defaultMargin: 16px;
             line-height: $headerHight;
             vertical-align: middle;
             color: $red;
+            &:hover {
+                color: #FF3838;
+                cursor: pointer;
+            }
         }
     }
 
@@ -320,6 +329,7 @@ $defaultMargin: 16px;
          border-left: 1px solid $gray;
             padding: 22px;
             display: table-cell;
+            min-height: 600px;
         }
     }
 }
@@ -419,4 +429,9 @@ h3 {
 .voteBarContainer {
     width: 100%;
     float: left;
+}
+
+#editUsers {
+    min-height: 600px;
+
 }

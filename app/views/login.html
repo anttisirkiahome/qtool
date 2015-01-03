@@ -1,17 +1,10 @@
+<toaster-container></toaster-container>
 <div class="login-container">
-<div class="rounded10">
 	<form class="white" ng-submit="login(user)">
-		<div class="row">
-			<div class="col-md-3 padding4">
-				<input type="text" id="username" placeholder="Username" ng-model="user.username" required/>
-			</div>
-			<div class="col-md-3 padding4">
-				<input type="text" id="password" placeholder="password" ng-model="user.password" required/>
-			</div>
-			<div class="col-md-4 padding4">
-				<button class="btn button">Login</button>
-			</div>
+		<div class="form-group">
+			<input class="form-control" type="text" id="username" placeholder="Username" ng-model="user.username" required/>
+			<input class="form-control" type="password" id="password" placeholder="Password" ng-model="user.password" required/>
+			<button class="btn button btn-success"><i class="glyphicon glyphicon-ok"></i> Login</button>
 		</div>
 	</form>
-</div>
 </div>
