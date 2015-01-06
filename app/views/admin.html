@@ -111,7 +111,7 @@
 	</div>
 
 	<!-- LIVE POLL-->
-	<div class="rounded10 poll livePoll" ng-show="publishedPollAvailable">
+	<div class="rounded10 poll livePoll adminMode" ng-show="publishedPollAvailable">
 		<h3 class="left">Live Poll</h3>
 		<span class="right">
 			<b>Time remaining:</b> {{livePoll.timeLeft}} seconds
@@ -127,6 +127,7 @@
 				<ul>
 					<li ng-repeat="answer in livePoll.answers">
 						<span class="answer">{{answer.answer}}</span> ({{answer.votes}} votes)
+						<div class="clearfix"></div>
 						<div class="voteBar" style="width:{{answer.barWidth}}%">{{answer.barWidth | number:0}}% </div>
 
 					</li>

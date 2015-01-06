@@ -8,7 +8,6 @@ var qtoolServices = angular.module('qtoolServices', ['ngResource']);
 // now used for redirecting 401 responses
 qtoolApp.factory('errorInterceptor', ['$q', '$rootScope', '$location', 'toaster',
     function ($q, $rootScope, $location, toaster) {
-        console.log('inside errorInterceptor')
         return {
             request: function (config) {
                 return config || $q.when(config);
@@ -25,7 +24,6 @@ qtoolApp.factory('errorInterceptor', ['$q', '$rootScope', '$location', 'toaster'
                 if (response && response.status >= 500) {
                 }
                 if (response && response.status === 401) {
-                    console.log('got unauthorized , redirecting')
                     toaster.pop('error', "Error", "Incorrect login credentials", 1500);
                     window.location = '#/login';
                 }
@@ -34,14 +32,14 @@ qtoolApp.factory('errorInterceptor', ['$q', '$rootScope', '$location', 'toaster'
         };
 }]);
 
-qtoolServices.factory('Auth', function($resource) {
-	return $resource('//localhost/qtool-api/api/auth/', {}, {
+qtoolServices.factory('Auth', function($resource, rootUrl) {
+	return $resource(rootUrl + '/qtool-api/api/auth/', {}, {
 		query: {isArray: false}
 	});
 });
 
-qtoolServices.factory('User', function($resource) {
-	return $resource('//localhost/qtool-api/api/user/:username',
+qtoolServices.factory('User', function($resource, rootUrl) {
+	return $resource(rootUrl + '/qtool-api/api/user/:username',
 	 {username:'@username'}, {
 		query: {
 			isArray: false
@@ -52,9 +50,8 @@ qtoolServices.factory('User', function($resource) {
 	});
 });
 
-qtoolServices.factory('Themes', function($resource) {
-	console.log('this is themes factory')
-	return $resource('//localhost/qtool-api/api/poll/themes/', {}, {
+qtoolServices.factory('Themes', function($resource, rootUrl) {
+	return $resource(rootUrl + '/qtool-api/api/poll/themes/', {}, {
 		query: {isArray: true}
 	});
 });
@@ -95,14 +92,13 @@ qtoolServices.service('AuthService', ['Auth', '$q', function(Auth, $q) {
 			return d.promise;
 		},
 		logout: function() {
-			console.log('logging out')
 			Auth.query({});
 		}
 	}
 }]);
 
-qtoolServices.factory('History', function($resource) {
-	return $resource('//localhost/qtool-api/api/poll/history/', {}, {
+qtoolServices.factory('History', function($resource, rootUrl) {
+	return $resource(rootUrl + '/qtool-api/api/poll/history/', {}, {
 		query: {isArray: false}
 	});
 });
@@ -119,12 +115,12 @@ qtoolServices.service('HistoryService', ['History', '$q', function(History, $q) 
 	}
 }]);
 
-qtoolServices.factory('Poll', ['$resource', '$rootScope', function($resource, $rootScope) {
-	return $resource($rootScope.serverRoot + '/qtool-api/api/poll', {q: '@poll'}, {
+qtoolServices.factory('Poll', function($resource, $rootScope, rootUrl) {
+	return $resource(rootUrl + '/qtool-api/api/poll', {q: '@poll'}, {
 		query: {isArray: false},
 		update: {method:'PUT', params: {updateId: '@id', type:'@vote'}}
 	});
-}]);
+});
 
 qtoolServices.service('PollService', ['Poll', '$q', 'cssInjector', '$cookieStore',  function(Poll, $q, cssInjector, $cookieStore) {
 	return {
@@ -142,7 +138,6 @@ qtoolServices.service('PollService', ['Poll', '$q', 'cssInjector', '$cookieStore
 		vote: function(id) {
 			var d = $q.defer();
 			var result = Poll.update({updateId:id, type: 'vote'}, function() {
-				console.log('updated this' , d.resolve(result))
 				d.resolve(result);
 			});
 			return d.promise;
@@ -156,7 +151,6 @@ qtoolServices.service('PollService', ['Poll', '$q', 'cssInjector', '$cookieStore
 					var receivedData = angular.fromJson(event.data).newPoll;
 
 					if(receivedData.success && !receivedData.expired) {
-						console.log('new')
 						$scope.publishedPollAvailable = true; //this boolean is for the views ng-show
 						$scope.livePoll = receivedData;
 
@@ -177,10 +171,10 @@ qtoolServices.service('PollService', ['Poll', '$q', 'cssInjector', '$cookieStore
 
 						cssInjector.add(receivedData.theme);
 					} else {
-						console.log('whut')
 						$scope.publishedPollAvailable = false;
 					}
 					$scope.$apply(); // is this a best practice? ... are there other ways?
+					// EDIT: what other ways? service manipulating scope in this case.
 				}
 			});
 		}

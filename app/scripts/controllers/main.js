@@ -2,9 +2,9 @@
 
 var qtoolControllers = angular.module('qtoolControllers', []);
 
-qtoolControllers.controller('MainCtrl', function ($scope, PollService, $cookieStore) {
+qtoolControllers.controller('MainCtrl', function ($scope, PollService, $cookieStore, rootUrl) {
 
-		var source = new EventSource("//localhost/qtool-api/poller.php");
+		var source = new EventSource(rootUrl + "/qtool-api/poller.php");
 		PollService.getLatestPoll($scope, source);
 		$scope.hasVoted = false;
 
@@ -29,13 +29,13 @@ qtoolControllers.controller('LoginCtrl', ['$scope', '$rootScope', 'AuthService',
 	}
 }]);
 
-qtoolControllers.controller('AdminCtrl', function ($scope, $window, AuthService, PollService, Themes, $q, HistoryService, $timeout, UserService, toaster) {
+qtoolControllers.controller('AdminCtrl', function (rootUrl, $scope, $window, AuthService, PollService, Themes, $q, HistoryService, $timeout, UserService, toaster) {
 	$scope.currentTemplate = 'newPoll'; //holds the current template ID
 	$scope.livePoll; //holds the latest published poll that is LIVE
 	$scope.pollPreview; //holds the editable poll
 	$scope.genericErrorText = 'There was an error while creating the poll, please try again in a minute.';
 	var timeIncrement = 15; //default time increment in seconds, used for poll duration
-	var source = new EventSource("//localhost/qtool-api/poller.php"); //polls for new polls / results (HTML5 pushstate)
+	var source = new EventSource(rootUrl + "/qtool-api/poller.php"); //polls for new polls / results (HTML5 pushstate)
 
 	//init default poll, plz don't touch this
 	var defaultPoll = {

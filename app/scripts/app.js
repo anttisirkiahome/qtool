@@ -26,7 +26,10 @@ qtoolApp.config(['$httpProvider', function($httpProvider) {
   $httpProvider.defaults.headers.get['If-Modified-Since'] = '0';
 }]);
 
-qtoolApp.config(function ($routeProvider) {
+qtoolApp.config(function ($routeProvider, $provide) {
+    var rootUrl = $("#linkRoot").attr("href");
+    $provide.constant('rootUrl', rootUrl);
+
     $routeProvider
       .when('/', {
         templateUrl: 'views/main.html',
@@ -44,10 +47,3 @@ qtoolApp.config(function ($routeProvider) {
         redirectTo: '/login'
       });
 });
-
-qtoolApp.run(['$rootScope',
-    function($rootScope) {
-        $rootScope.serverRoot = '//localhost';
-        //$rootScope.serverRoot = 'http://185.20.139.103';
-    }
-]);
